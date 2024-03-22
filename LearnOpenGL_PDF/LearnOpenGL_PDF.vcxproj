@@ -158,6 +158,9 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\vendor\glad.c" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Shader.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
