@@ -86,6 +86,29 @@ int main()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBindVertexArray(0);
 
+
+	unsigned int texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	int width, height, noChannels;
+	unsigned char* data = stbi_load("src/res/textures/container.jpg", &width, &height, &noChannels, 0);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(texture);
+	}
+	else
+	{
+		std::cout << "Failed to load the Texture!\n";
+	}
+	stbi_image_free(data);
+
 	Shader shader("src/res/shaders/vertex.vert", "src/res/shaders/fragment.frag");
 
 	// Render Loop
@@ -100,6 +123,7 @@ int main()
 		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 		shader.Use();
+		glBindTexture(GL_TEXTURE_2D, texture);
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

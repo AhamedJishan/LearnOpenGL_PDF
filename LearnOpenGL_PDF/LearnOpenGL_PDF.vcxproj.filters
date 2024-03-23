@@ -37,4 +37,9 @@
     <None Include="src\res\shaders\vertex.vert" />
     <None Include="src\res\shaders\fragment.frag" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="src\res\textures\container.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>
