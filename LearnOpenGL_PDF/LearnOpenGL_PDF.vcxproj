@@ -157,9 +157,11 @@
   <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\vendor\glad.c" />
+    <ClCompile Include="src\vendor\stb_image_impl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\vendor\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\res\shaders\fragment.frag" />
