@@ -98,7 +98,7 @@ public:
 	// Use/Activate Shader
 	void Use()
 	{
-		glLinkProgram(ID);
+		glUseProgram(ID);
 	}
 	// Uniform utility functions
 	void setBool(const std::string& name, bool value) const

@@ -3,6 +3,8 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
+#include "Shader.h"
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -17,33 +19,6 @@ void ProcessInputs(GLFWwindow *window)
 	}
 }
 
-void ShaderErrorCheck(unsigned int &shader)
-{
-	int success;
-	char infoLog[512];
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-
-	if (!success)
-	{
-		glGetShaderInfoLog(shader, 512, NULL, infoLog);
-		std::cout << "Shader Compilation Error:\n" << infoLog << std::endl;
-	}
-}
-
-void ShaderProgramErrorCheck(unsigned int& program)
-{
-	int success;
-	char infoLog[512];
-	glGetProgramiv(program, GL_LINK_STATUS, &success);
-
-	if (!success)
-	{
-		glGetProgramInfoLog(program, 512, NULL, infoLog);
-		std::cout << "Shader Prorgam Linkage Error:\n" << infoLog << std::endl;
-	}
-}
-
-
 const float vertices[] = {
 	  // Coordinates        // Colors
 	-0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	//0 Bottom-left
@@ -56,22 +31,6 @@ unsigned int indices[] = {
 	0, 1, 2,
 	2, 3, 0
 };
-
-const char* vertexShaderSource = "#version 330\n"
-	"layout (location = 0) in vec3 aPos;\n"
-	"layout (location = 1) in vec3 aColor;\n"
-	"out vec3 ourColor;\n"
-	"void main(){\n"
-	"	gl_Position = vec4(aPos, 1.0f);\n"
-	"	ourColor = aColor;\n"
-	"}\0";
-const char* fragmentShaderSource = "#version 330\n"
-	"out vec4 FragColor;\n"
-	"in vec3 ourColor;\n"
-	"void main(){\n"
-	//"	FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-	"	FragColor = vec4(ourColor, 1.0f);\n"
-	"}\0";
 
 
 int main()
@@ -102,29 +61,6 @@ int main()
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-	unsigned int vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
-	ShaderErrorCheck(vertexShader);
-
-	unsigned int fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-	ShaderErrorCheck(fragmentShader);
-
-	unsigned int shaderProgram;
-	shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-
-	glLinkProgram(shaderProgram);
-	ShaderProgramErrorCheck(shaderProgram);
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
-
 	// Vertex Array Object, Vertex Buffer Object, Element Buffer Object
 	unsigned int VAO, VBO, EBO;
 	glGenVertexArrays(1, &VAO);
@@ -147,6 +83,8 @@ int main()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBindVertexArray(0);
 
+	Shader shader("src/res/shaders/vertex.vert", "src/res/shaders/fragment.frag");
+
 	// Render Loop
 	while (!glfwWindowShouldClose(window))
 	{
@@ -158,7 +96,7 @@ int main()
 		// Wireframe
 		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-		glUseProgram(shaderProgram);
+		shader.Use();
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
