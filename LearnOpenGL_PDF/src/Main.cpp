@@ -140,31 +140,20 @@ int main()
 	shader.setInt("texture2", 1);
 
 	glm::mat4 trans = glm::mat4(1.0f);
-	trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.0f));
-
-	bool shouldTransform = true;
+	
 	unsigned int transLocation = glGetUniformLocation(shader.ID, "transform");
-	glUniformMatrix4fv(transLocation, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
+	glUniformMatrix4fv(transLocation, 1, GL_FALSE, glm::value_ptr(trans));
 
 	// Render Loop
 	while (!glfwWindowShouldClose(window))
 	{
 		ProcessInputs(window);
 
-		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-		{
-			if (shouldTransform)
-			{
-				glUniformMatrix4fv(transLocation, 1, GL_FALSE, glm::value_ptr(trans));
-				trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-				shouldTransform = false;
-			}
-		}
-		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE)
-		{
-			shouldTransform = true;
-		}
+		float y = sin(glm::radians(glfwGetTime()*200));
+		trans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, y/2, 0.0f));
+		trans = glm::rotate(trans, glm::radians((float)glfwGetTime()*200), glm::vec3(0.0f, 0.0f, 1.0f));
+
+		glUniformMatrix4fv(transLocation, 1, GL_FALSE, glm::value_ptr(trans));
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
