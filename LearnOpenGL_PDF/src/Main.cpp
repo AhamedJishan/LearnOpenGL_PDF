@@ -3,6 +3,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stb_image.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Shader.h"
 
@@ -136,10 +139,32 @@ int main()
 	shader.setInt("texture1", 0);
 	shader.setInt("texture2", 1);
 
+	glm::mat4 trans = glm::mat4(1.0f);
+	trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.0f));
+
+	bool shouldTransform = true;
+	unsigned int transLocation = glGetUniformLocation(shader.ID, "transform");
+	glUniformMatrix4fv(transLocation, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
+
 	// Render Loop
 	while (!glfwWindowShouldClose(window))
 	{
 		ProcessInputs(window);
+
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+		{
+			if (shouldTransform)
+			{
+				glUniformMatrix4fv(transLocation, 1, GL_FALSE, glm::value_ptr(trans));
+				trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+				shouldTransform = false;
+			}
+		}
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE)
+		{
+			shouldTransform = true;
+		}
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
