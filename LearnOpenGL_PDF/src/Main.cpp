@@ -193,7 +193,6 @@ int main()
 	glm::mat4 model = glm::mat4(1.0f);
 
 	glm::mat4 view = glm::mat4(1.0f);
-	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.0f), (float)(widthScreen / heightScreen), 0.1f, 100.0f);
@@ -211,7 +210,11 @@ int main()
 
 		shader.Use();
 
-		view = glm::rotate(view, glm::radians((float)glfwGetTime()/200), glm::vec3(0.0f, 1.0f, 0.0f));
+		const float radius = 10.0f;
+		float camX = sin(glfwGetTime()) * radius;
+		float camZ = cos(glfwGetTime()) * radius;
+		view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
 		shader.SetMat4("view", view);
 		shader.SetMat4("projection", projection);
 
