@@ -12,7 +12,8 @@
 int widthScreen = 1000;
 int heightScreen = 1000;
 
-float cameraSpeed = 0.005f;
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
 
 glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 camForward = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -25,6 +26,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void ProcessInputs(GLFWwindow *window)
 {
+	float cameraSpeed = 2.5f * deltaTime;
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
 		camPosition += cameraSpeed * camForward;
@@ -260,6 +262,10 @@ int main()
 		// Check call events and swap the buffers
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
 	}
 	
 	glfwTerminate();
