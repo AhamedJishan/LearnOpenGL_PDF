@@ -9,8 +9,14 @@
 
 #include "Shader.h"
 
-int widthScreen = 800;
-int heightScreen = 800;
+int widthScreen = 1000;
+int heightScreen = 1000;
+
+float cameraSpeed = 0.005f;
+
+glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 camForward = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 camUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -19,6 +25,23 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void ProcessInputs(GLFWwindow *window)
 {
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		camPosition += cameraSpeed * camForward;
+	}
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		camPosition -= cameraSpeed * camForward;
+	}
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		camPosition -= cameraSpeed * glm::normalize(glm::cross(camForward, camUp));
+	}
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		camPosition += cameraSpeed * glm::normalize(glm::cross(camForward, camUp));
+	}
+
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, true);
@@ -210,10 +233,7 @@ int main()
 
 		shader.Use();
 
-		const float radius = 10.0f;
-		float camX = sin(glfwGetTime()) * radius;
-		float camZ = cos(glfwGetTime()) * radius;
-		view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		view = glm::lookAt(camPosition, camPosition + camForward, camUp);
 
 		shader.SetMat4("view", view);
 		shader.SetMat4("projection", projection);
