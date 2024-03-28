@@ -15,13 +15,54 @@ int heightScreen = 1000;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
+float lastX = widthScreen / 2;
+float lastY = heightScreen / 2;
+
+float yaw = -90.0f;
+float pitch = 0.0f;
+
 glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 camForward = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 camUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
+bool firstMouse = true;
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
+}
+
+void mouse_callback(GLFWwindow *window, double xPos, double yPos)
+{
+	if (firstMouse)
+	{
+		lastX = xPos;
+		lastY = yPos;
+		firstMouse = false;
+	}
+
+	float xOffset = xPos - lastX;
+	float yOffset = yPos - lastY;
+
+	lastX = xPos;
+	lastY = yPos;
+
+	float sensitivity = 0.1f;
+	xOffset *= sensitivity;
+	yOffset *= sensitivity;
+
+	yaw += xOffset;
+	pitch -= yOffset;
+
+	if (pitch > 89.0f) pitch = 89.0f;
+	if (pitch < -89.0f) pitch = -89.0f;
+
+	glm::vec3 direction;
+
+	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	direction.y = sin(glm::radians(pitch));
+	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+	camForward = glm::normalize(direction);
 }
 
 void ProcessInputs(GLFWwindow *window)
@@ -140,6 +181,8 @@ int main()
 	glViewport(0, 0, widthScreen, heightScreen);
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// Vertex Array Object, Vertex Buffer Object, Element Buffer Object
 	unsigned int VAO, VBO, EBO;
