@@ -21,6 +21,9 @@ float lastY = heightScreen / 2;
 float yaw = -90.0f;
 float pitch = 0.0f;
 
+float fov = 45.0f;
+float zoom = 45.0f;
+
 glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 camForward = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 camUp = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -63,6 +66,16 @@ void mouse_callback(GLFWwindow *window, double xPos, double yPos)
 	direction.y = sin(glm::radians(pitch));
 	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 	camForward = glm::normalize(direction);
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	zoom -= (float)yoffset;
+
+	if (zoom < 1.0f) zoom = 1.0f;
+	if (zoom > 45.0f) zoom = 45.0f;
+
+	fov = zoom;
 }
 
 void ProcessInputs(GLFWwindow *window)
@@ -182,6 +195,7 @@ int main()
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetScrollCallback(window, scroll_callback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// Vertex Array Object, Vertex Buffer Object, Element Buffer Object
@@ -263,7 +277,7 @@ int main()
 	glm::mat4 view = glm::mat4(1.0f);
 
 	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(45.0f), (float)(widthScreen / heightScreen), 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(fov), (float)(widthScreen / heightScreen), 0.1f, 100.0f);
 
 	// Render Loop
 	while (!glfwWindowShouldClose(window))
@@ -279,6 +293,7 @@ int main()
 		shader.Use();
 
 		view = glm::lookAt(camPosition, camPosition + camForward, camUp);
+		projection = glm::perspective(glm::radians(fov), (float)(widthScreen / heightScreen), 0.1f, 100.0f);
 
 		shader.SetMat4("view", view);
 		shader.SetMat4("projection", projection);
