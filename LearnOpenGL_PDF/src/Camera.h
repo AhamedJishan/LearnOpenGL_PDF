@@ -81,7 +81,7 @@ public:
 		}
 		if (input == LEFT)
 		{
-			Position -= RIGHT * velocity;
+			Position -= Right * velocity;
 		}
 		if (input == RIGHT)
 		{
