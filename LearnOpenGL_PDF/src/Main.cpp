@@ -32,60 +32,52 @@ bool firstMouse = true;
 // set up vertex data (and buffer(s)) and configure vertex attributes
 // ------------------------------------------------------------------
 const float vertices[] = {
-	-0.5f,-0.5f,-0.5f, 0.0f, 0.0f,
-	 0.5f,-0.5f,-0.5f, 1.0f, 0.0f,
-	 0.5f, 0.5f,-0.5f, 1.0f, 1.0f,
-	 0.5f, 0.5f,-0.5f, 1.0f, 1.0f,
-	 -0.5f, 0.5f,-0.5f, 0.0f,1.0f,
-	 -0.5f,-0.5f,-0.5f, 0.0f,0.0f,
+	-0.5f, -0.5f, -0.5f,
+	 0.5f, -0.5f, -0.5f,
+	 0.5f,  0.5f, -0.5f,
+	 0.5f,  0.5f, -0.5f,
+	-0.5f,  0.5f, -0.5f,
+	-0.5f, -0.5f, -0.5f,
 
-	 -0.5f,-0.5f, 0.5f, 0.0f,0.0f,
-	 0.5f,-0.5f, 0.5f, 1.0f,0.0f,
-	 0.5f, 0.5f, 0.5f, 1.0f,1.0f,
-	0.5f, 0.5f, 0.5f, 1.0f,1.0f,
-	-0.5f, 0.5f, 0.5f, 0.0f,1.0f,
-	-0.5f,-0.5f, 0.5f, 0.0f,0.0f,
+	-0.5f, -0.5f,  0.5f,
+	 0.5f, -0.5f,  0.5f,
+	 0.5f,  0.5f,  0.5f,
+	 0.5f,  0.5f,  0.5f,
+	-0.5f,  0.5f,  0.5f,
+	-0.5f, -0.5f,  0.5f,
 
-	-0.5f, 0.5f, 0.5f, 1.0f,0.0f,
-	-0.5f, 0.5f,-0.5f, 1.0f,1.0f,
-	-0.5f,-0.5f,-0.5f, 0.0f,1.0f,
-	-0.5f,-0.5f,-0.5f, 0.0f,1.0f,
-	-0.5f,-0.5f, 0.5f, 0.0f,0.0f,
-	-0.5f, 0.5f, 0.5f, 1.0f,0.0f,
+	-0.5f,  0.5f,  0.5f,
+	-0.5f,  0.5f, -0.5f,
+	-0.5f, -0.5f, -0.5f,
+	-0.5f, -0.5f, -0.5f,
+	-0.5f, -0.5f,  0.5f,
+	-0.5f,  0.5f,  0.5f,
 
-	0.5f, 0.5f, 0.5f, 1.0f,0.0f,
-	0.5f, 0.5f,-0.5f, 1.0f,1.0f,
-	0.5f,-0.5f,-0.5f, 0.0f,1.0f,
-	0.5f,-0.5f,-0.5f, 0.0f,1.0f,
-	0.5f,-0.5f, 0.5f, 0.0f,0.0f,
-	0.5f, 0.5f, 0.5f, 1.0f,0.0f,
+	 0.5f,  0.5f,  0.5f,
+	 0.5f,  0.5f, -0.5f,
+	 0.5f, -0.5f, -0.5f,
+	 0.5f, -0.5f, -0.5f,
+	 0.5f, -0.5f,  0.5f,
+	 0.5f,  0.5f,  0.5f,
 
-	-0.5f,-0.5f,-0.5f, 0.0f,1.0f,
-	0.5f,-0.5f,-0.5f, 1.0f,1.0f,
-	0.5f,-0.5f, 0.5f, 1.0f,0.0f,
-	0.5f,-0.5f, 0.5f, 1.0f,0.0f,
-	-0.5f,-0.5f, 0.5f, 0.0f,0.0f,
-	-0.5f,-0.5f,-0.5f, 0.0f,1.0f,
+	-0.5f, -0.5f, -0.5f,
+	 0.5f, -0.5f, -0.5f,
+	 0.5f, -0.5f,  0.5f,
+	 0.5f, -0.5f,  0.5f,
+	-0.5f, -0.5f,  0.5f,
+	-0.5f, -0.5f, -0.5f,
 
-	-0.5f, 0.5f,-0.5f, 0.0f,1.0f,
-	0.5f, 0.5f,-0.5f, 1.0f,1.0f,
-	0.5f, 0.5f, 0.5f, 1.0f,0.0f,
-	0.5f, 0.5f, 0.5f, 1.0f,0.0f,
-	-0.5f, 0.5f, 0.5f, 0.0f,0.0f,
-	-0.5f, 0.5f,-0.5f, 0.0f,1.0f
+	-0.5f,  0.5f, -0.5f,
+	 0.5f,  0.5f, -0.5f,
+	 0.5f,  0.5f,  0.5f,
+	 0.5f,  0.5f,  0.5f,
+	-0.5f,  0.5f,  0.5f,
+	-0.5f,  0.5f, -0.5f,
 };
 // world space positions of our cubes
 glm::vec3 cubePositions[] = {
 	 glm::vec3(0.0f, 0.0f, 0.0f),
-	 glm::vec3(2.0f, 5.0f,-15.0f),
-	 glm::vec3(-1.5f,-2.2f,-2.5f),
-	 glm::vec3(-3.8f,-2.0f,-12.3f),
-	 glm::vec3(2.4f,-0.4f,-3.5f),
-	 glm::vec3(-1.7f, 3.0f,-7.5f),
-	 glm::vec3(1.3f,-2.0f,-2.5f),
-	 glm::vec3(1.5f, 2.0f,-2.5f),
-	 glm::vec3(1.5f, 0.2f,-1.5f),
-	 glm::vec3(-1.3f, 1.0f,-1.5f)
+	 glm::vec3(1.2f, 1.0f, 2.0f)
 };
 
 
@@ -138,14 +130,29 @@ int main()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	// texture coordinate attribute
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	/*glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);*/
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+
+	// Light VAO
+	// ---------
+	unsigned int lightVAO;
+	glGenVertexArrays(1, &lightVAO);
+
+	glBindVertexArray(lightVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
 
 	stbi_set_flip_vertically_on_load(true);
 	glEnable(GL_DEPTH_TEST);
@@ -196,6 +203,7 @@ int main()
 	stbi_image_free(data);
 
 	Shader shader("src/res/shaders/vertex.vert", "src/res/shaders/fragment.frag");
+	Shader lightShader("src/res/shaders/vertex.vert", "src/res/shaders/lightFragment.frag");
 
 	shader.Use();
 	shader.SetInt("texture1", 0);
@@ -216,7 +224,7 @@ int main()
 
 		// Render
 		// ------
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Bind textures on corresponding texture units
@@ -236,18 +244,33 @@ int main()
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.SetMat4("view", view);
 
-		// Render Boxes
-		glBindVertexArray(VAO);
-		for (unsigned int i = 0; i < 10; i++)
-		{
-			// Calculate model matrix for each box
-			glm::mat4 model = glm::translate(glm::mat4(1.0f), cubePositions[i]);
-			float angle = 20.0f * i;
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-			shader.SetMat4("model", model);
+		// model transformation
+		glm::mat4 model = glm::mat4(1.0f);
+		shader.SetMat4("model", model);
 
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
+		shader.SetVec3("objectColor", 1.0f, 0.5f, 0.31f);
+		shader.SetVec3("lightColor", 1.0f, 1.0f, 1.0f);
+
+		// Render Box
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		// Activate shader
+		lightShader.Use();
+
+		lightShader.SetMat4("projection", projection);
+		lightShader.SetMat4("view", view);
+
+		// model transformation
+		model = glm::translate(glm::mat4(1.0f), cubePositions[1]);
+		model = glm::scale(model, glm::vec3(0.2f));
+		lightShader.SetMat4("model", model);
+
+		// Render Box
+		glBindVertexArray(lightVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------

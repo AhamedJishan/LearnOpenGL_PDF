@@ -39,6 +39,7 @@
   <ItemGroup>
     <None Include="src\res\shaders\vertex.vert" />
     <None Include="src\res\shaders\fragment.frag" />
+    <None Include="src\res\shaders\lightFragment.frag" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\res\textures\container.jpg">
