@@ -32,47 +32,48 @@ bool firstMouse = true;
 // set up vertex data (and buffer(s)) and configure vertex attributes
 // ------------------------------------------------------------------
 const float vertices[] = {
-	-0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f,  0.5f, -0.5f,
-	 0.5f,  0.5f, -0.5f,
-	-0.5f,  0.5f, -0.5f,
-	-0.5f, -0.5f, -0.5f,
-
-	-0.5f, -0.5f,  0.5f,
-	 0.5f, -0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
-	-0.5f, -0.5f,  0.5f,
-
-	-0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f, -0.5f,
-	-0.5f, -0.5f, -0.5f,
-	-0.5f, -0.5f, -0.5f,
-	-0.5f, -0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
-
-	 0.5f,  0.5f,  0.5f,
-	 0.5f,  0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
-
-	-0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f,  0.5f,
-	 0.5f, -0.5f,  0.5f,
-	-0.5f, -0.5f,  0.5f,
-	-0.5f, -0.5f, -0.5f,
-
-	-0.5f,  0.5f, -0.5f,
-	 0.5f,  0.5f, -0.5f,
-	 0.5f,  0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f, -0.5f,
+	//		Positions			   Normals
+	-0.5f, -0.5f, -0.5f,	  0.0f,  0.0f, -1.0f,
+	 0.5f, -0.5f, -0.5f,	  0.0f,  0.0f, -1.0f,
+	 0.5f,  0.5f, -0.5f,	  0.0f,  0.0f, -1.0f,
+	 0.5f,  0.5f, -0.5f,	  0.0f,  0.0f, -1.0f,
+	-0.5f,  0.5f, -0.5f,	  0.0f,  0.0f, -1.0f,
+	-0.5f, -0.5f, -0.5f,	  0.0f,  0.0f, -1.0f,
+							
+	-0.5f, -0.5f,  0.5f,	  0.0f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,	  0.0f,  0.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,	  0.0f,  0.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,	  0.0f,  0.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,	  0.0f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,	  0.0f,  0.0f, 1.0f,
+							
+	-0.5f,  0.5f,  0.5f,	 -1.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f, -0.5f,	 -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f,	 -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f,	 -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f,  0.5f,	 -1.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f,	 -1.0f,  0.0f,  0.0f,
+							
+	 0.5f,  0.5f,  0.5f,	  1.0f,  0.0f,  0.0f,
+	 0.5f,  0.5f, -0.5f,	  1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,	  1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,	  1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,	  1.0f,  0.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,	  1.0f,  0.0f,  0.0f,
+							
+	-0.5f, -0.5f, -0.5f,	  0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,	  0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,	  0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,	  0.0f, -1.0f,  0.0f,
+	-0.5f, -0.5f,  0.5f,	  0.0f, -1.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f,	  0.0f, -1.0f,  0.0f,
+							
+	-0.5f,  0.5f, -0.5f,	  0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f, -0.5f,	  0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,	  0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,	  0.0f,  1.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f,	  0.0f,  1.0f,  0.0f,
+	-0.5f,  0.5f, -0.5f,	  0.0f,  1.0f,  0.0f
 };
 // world space positions of our cubes
 glm::vec3 cubePositions[] = {
@@ -130,11 +131,10 @@ int main()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	// texture coordinate attribute
-	/*glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);*/
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -147,7 +147,7 @@ int main()
 	glBindVertexArray(lightVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	glBindVertexArray(0);
@@ -250,6 +250,7 @@ int main()
 
 		shader.SetVec3("objectColor", 1.0f, 0.5f, 0.31f);
 		shader.SetVec3("lightColor", 1.0f, 1.0f, 1.0f);
+		shader.SetVec3("lightPos", 1.2f, 1.0f, 2.0f);
 
 		// Render Box
 		glBindVertexArray(VAO);
