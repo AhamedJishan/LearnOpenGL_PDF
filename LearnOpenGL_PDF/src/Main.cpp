@@ -98,7 +98,7 @@ int main()
 
 	// glfw window creation
 	// --------------------
-	GLFWwindow *window = glfwCreateWindow(SCR_HEIGHT, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+	GLFWwindow *window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
 	if (!window)
 	{
 		std::cout << "Failed to create window!\n";
