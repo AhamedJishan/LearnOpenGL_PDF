@@ -248,9 +248,12 @@ int main()
 		glm::mat4 model = glm::mat4(1.0f);
 		shader.SetMat4("model", model);
 
+		float time = glfwGetTime();
+		glm::vec3 lightPos = cubePositions[0] + glm::vec3(sin(time) * 2, 0.0f, cos(time) * 2);
+
 		shader.SetVec3("objectColor", 1.0f, 0.5f, 0.31f);
 		shader.SetVec3("lightColor", 1.0f, 1.0f, 1.0f);
-		shader.SetVec3("lightPos", 1.2f, 1.0f, 2.0f);
+		shader.SetVec3("lightPos", lightPos.x, lightPos.y, lightPos.z);
 		shader.SetVec3("viewPos", camera.Position.x, camera.Position.y, camera.Position.z);
 
 		// Render Box
@@ -264,7 +267,7 @@ int main()
 		lightShader.SetMat4("view", view);
 
 		// model transformation
-		model = glm::translate(glm::mat4(1.0f), cubePositions[1]);
+		model = glm::translate(glm::mat4(1.0f), lightPos);
 		model = glm::scale(model, glm::vec3(0.2f));
 		lightShader.SetMat4("model", model);
 
