@@ -251,6 +251,7 @@ int main()
 		shader.SetVec3("objectColor", 1.0f, 0.5f, 0.31f);
 		shader.SetVec3("lightColor", 1.0f, 1.0f, 1.0f);
 		shader.SetVec3("lightPos", 1.2f, 1.0f, 2.0f);
+		shader.SetVec3("viewPos", camera.Position.x, camera.Position.y, camera.Position.z);
 
 		// Render Box
 		glBindVertexArray(VAO);
