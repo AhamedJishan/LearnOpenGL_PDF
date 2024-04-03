@@ -258,11 +258,14 @@ int main()
 		shader.SetFloat("material.shininess", 32.0f);
 
 		glm::vec3 lightColor;
+
 		lightColor.x = sin(glfwGetTime() * 2.0f);
 		lightColor.y = sin(glfwGetTime() * 0.7f);
 		lightColor.z = sin(glfwGetTime() * 1.3f);
+
 		glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
 		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+
 		shader.SetVec3("light.ambient", ambientColor);
 		shader.SetVec3("light.diffuse", diffuseColor);
 		shader.SetVec3("light.specular", 1.0f, 1.0f, 1.0f);
