@@ -250,15 +250,21 @@ int main()
 
 		shader.SetVec3("objectColor", 1.0f, 0.5f, 0.31f);
 		shader.SetVec3("lightPos", 1.2f, 1.0f, 2.0f);
-		shader.SetVec3("viewPos", camera.Position.x, camera.Position.y, camera.Position.z);
+		shader.SetVec3("viewPos", camera.Position);
 
 		shader.SetVec3("material.ambient", 1.0f, 0.5f, 0.31f);
 		shader.SetVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
 		shader.SetVec3("material.specular", 0.5f, 0.5f, 0.5f);
 		shader.SetFloat("material.shininess", 32.0f);
 
-		shader.SetVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-		shader.SetVec3("light.diffuse", 0.5f, 0.5f, 0.5f); // darkened
+		glm::vec3 lightColor;
+		lightColor.x = sin(glfwGetTime() * 2.0f);
+		lightColor.y = sin(glfwGetTime() * 0.7f);
+		lightColor.z = sin(glfwGetTime() * 1.3f);
+		glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
+		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+		shader.SetVec3("light.ambient", ambientColor);
+		shader.SetVec3("light.diffuse", diffuseColor);
 		shader.SetVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
 		// Render Box
