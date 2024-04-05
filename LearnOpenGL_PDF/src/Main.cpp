@@ -164,6 +164,7 @@ int main()
 	Shader lightShader("src/res/shaders/vertex.vert", "src/res/shaders/lightFragment.frag");
 
 	unsigned int diffuseMap = LoadTexture("src/res/textures/container2.png");
+	unsigned int specularMap = LoadTexture("src/res/textures/container2_specular.png");
 
 	shader.Use();
 
@@ -171,6 +172,10 @@ int main()
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, diffuseMap);
 	shader.SetInt("material.diffuse", 0);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, specularMap);
+	shader.SetInt("material.specular", 1);
 
 	// Render Loop
 	while (!glfwWindowShouldClose(window))
