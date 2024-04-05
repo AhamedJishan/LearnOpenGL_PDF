@@ -78,8 +78,16 @@ const float vertices[] = {
 };
 // world space positions of our cubes
 glm::vec3 cubePositions[] = {
-	 glm::vec3(0.0f, 0.0f, 0.0f),
-	 glm::vec3(1.2f, 1.0f, 2.0f)
+		glm::vec3(0.0f,  0.0f,  0.0f),
+		glm::vec3(2.0f,  5.0f, -15.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
 };
 
 
@@ -206,19 +214,29 @@ int main()
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.SetMat4("view", view);
 
-		// model transformation
 		glm::mat4 model = glm::mat4(1.0f);
-		shader.SetMat4("model", model);
 
+		// render containers
+		glBindVertexArray(VAO);
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			// calculate the model matrix for each object and pass it to shader before drawing
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			shader.SetMat4("model", model);
 
-		shader.SetVec3("light.position", 1.2f, 1.0f, 2.0f);
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+
+		shader.SetVec3("light.direction", -0.2f, -1.0f, -0.3f);
 		shader.SetVec3("viewPos", camera.Position);
 
 		shader.SetVec3("light.ambient", 0.2f, 0.2f, 0.2f);
 		shader.SetVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 		shader.SetVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
-		shader.SetVec3("material.specular", 0.5f, 0.5f, 0.5f);
 		shader.SetFloat("material.shininess", 32.0f);
 
 		// Render Box
@@ -239,8 +257,6 @@ int main()
 		// Render Box
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
-
-
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
