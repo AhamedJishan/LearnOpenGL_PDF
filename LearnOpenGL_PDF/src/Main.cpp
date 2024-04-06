@@ -168,7 +168,7 @@ int main()
 	stbi_set_flip_vertically_on_load(true);
 	glEnable(GL_DEPTH_TEST);
 
-	Shader shader("src/res/shaders/vertex.vert", "src/res/shaders/pointLight.frag");
+	Shader shader("src/res/shaders/vertex.vert", "src/res/shaders/spotlight.frag");
 	Shader lightShader("src/res/shaders/vertex.vert", "src/res/shaders/lightFragment.frag");
 
 	unsigned int diffuseMap = LoadTexture("src/res/textures/container2.png");
@@ -233,7 +233,9 @@ int main()
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 
-		shader.SetVec3("light.position", lightPos);
+		shader.SetVec3("light.position", camera.Position);
+		shader.SetVec3("light.direction", camera.Front);
+		shader.SetFloat("light.cutoff", cos(glm::radians(12.5f)));
 		shader.SetVec3("viewPos", camera.Position);
 
 		shader.SetVec3("light.ambient", 0.2f, 0.2f, 0.2f);
