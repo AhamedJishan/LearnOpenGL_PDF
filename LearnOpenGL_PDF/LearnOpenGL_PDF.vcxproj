@@ -167,6 +167,7 @@
   <ItemGroup>
     <None Include="src\res\shaders\fragment.frag" />
     <None Include="src\res\shaders\lightFragment.frag" />
+    <None Include="src\res\shaders\pointLight.frag" />
     <None Include="src\res\shaders\vertex.vert" />
   </ItemGroup>
   <ItemGroup>

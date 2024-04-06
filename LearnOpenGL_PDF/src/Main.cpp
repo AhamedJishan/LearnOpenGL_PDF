@@ -168,7 +168,7 @@ int main()
 	stbi_set_flip_vertically_on_load(true);
 	glEnable(GL_DEPTH_TEST);
 
-	Shader shader("src/res/shaders/vertex.vert", "src/res/shaders/fragment.frag");
+	Shader shader("src/res/shaders/vertex.vert", "src/res/shaders/pointLight.frag");
 	Shader lightShader("src/res/shaders/vertex.vert", "src/res/shaders/lightFragment.frag");
 
 	unsigned int diffuseMap = LoadTexture("src/res/textures/container2.png");
@@ -184,6 +184,9 @@ int main()
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, specularMap);
 	shader.SetInt("material.specular", 1);
+
+	// lighting
+	glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 	// Render Loop
 	while (!glfwWindowShouldClose(window))
@@ -230,12 +233,16 @@ int main()
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 
-		shader.SetVec3("light.direction", -0.2f, -1.0f, -0.3f);
+		shader.SetVec3("light.position", lightPos);
 		shader.SetVec3("viewPos", camera.Position);
 
 		shader.SetVec3("light.ambient", 0.2f, 0.2f, 0.2f);
 		shader.SetVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 		shader.SetVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+		shader.SetFloat("light.constant", 1.0f);
+		shader.SetFloat("light.linear", 0.09f);
+		shader.SetFloat("light.quadratic", 0.032f);
 
 		shader.SetFloat("material.shininess", 32.0f);
 
@@ -250,7 +257,7 @@ int main()
 		lightShader.SetMat4("view", view);
 
 		// model transformation
-		model = glm::translate(glm::mat4(1.0f), cubePositions[1]);
+		model = glm::translate(glm::mat4(1.0f), lightPos);
 		model = glm::scale(model, glm::vec3(0.2f));
 		lightShader.SetMat4("model", model);
 
