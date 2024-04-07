@@ -235,8 +235,8 @@ int main()
 
 		shader.SetVec3("light.position", camera.Position);
 		shader.SetVec3("light.direction", camera.Front);
-		shader.SetFloat("light.innerCutoff", cos(glm::radians(15.0f)));
-		shader.SetFloat("light.outerCutoff", cos(glm::radians(18.0f)));
+		shader.SetFloat("light.innerCutoff", cos(glm::radians(15.5f)));
+		shader.SetFloat("light.outerCutoff", cos(glm::radians(18.5f)));
 		shader.SetVec3("viewPos", camera.Position);
 
 		shader.SetVec3("light.ambient", 0.2f, 0.2f, 0.2f);
