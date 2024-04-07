@@ -10,7 +10,8 @@ struct Light
 {
 	vec3 position;
 	vec3 direction;
-	float cutoff;
+	float innerCutoff;
+	float outerCutoff;
 
 	vec3 ambient;
 	vec3 diffuse;
@@ -44,9 +45,11 @@ void main()
 
 	vec3 lightDir = normalize(light.position - FragPos);
 	float theta = dot(lightDir, normalize(-light.direction));
+	float epsilon = light.innerCutoff - light.outerCutoff;
+	float intensity = clamp( (theta - light.innerCutoff)/epsilon, 0.0f, 1.0f );
 
 
-	if (theta > light.cutoff)
+	if (theta > light.innerCutoff)
 	{
 		//diffuse
 		vec3 norm = normalize(Normal);
@@ -62,8 +65,8 @@ void main()
 		float distance = length(light.position - FragPos);
 		float attenuation = 1.0f / ( light.constant + light.linear * distance + light.quadratic * (distance * distance) );
 
-		diffuse *= attenuation;
-		specular *= attenuation;
+		diffuse *= attenuation * intensity;
+		specular *= attenuation * intensity;
 	}
 
 	// Applying all the lights
