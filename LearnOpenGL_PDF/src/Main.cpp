@@ -255,8 +255,8 @@ int main()
 		shader.SetVec3("spotLight.direction", camera.Front);
 		shader.SetFloat("spotLight.innerCutoff", cos(glm::radians(15.0f)));
 		shader.SetFloat("spotLight.outerCutoff", cos(glm::radians(18.0f)));
-		shader.SetVec3("spotLight.ambient", 0.1f, 0.1f, 0.1f);
-		shader.SetVec3("spotLight.diffuse", 0.8f, 0.8f, 0.8f);
+		shader.SetVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+		shader.SetVec3("spotLight.diffuse", 0.5f, 0.5f, 0.5f);
 		shader.SetVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
 		shader.SetFloat("spotLight.constant", 1.0f);
 		shader.SetFloat("spotLight.linear", 0.09f);
