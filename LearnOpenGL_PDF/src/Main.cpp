@@ -237,11 +237,6 @@ int main()
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 
-		/*shader.SetVec3("light.position", camera.Position);
-		shader.SetVec3("light.direction", camera.Front);
-		shader.SetFloat("light.innerCutoff", cos(glm::radians(15.0f)));
-		shader.SetFloat("light.outerCutoff", cos(glm::radians(18.0f)));*/
-
 		shader.SetFloat("material.shininess", 32.0f);
 		shader.SetVec3("viewPos", camera.Position);
 
