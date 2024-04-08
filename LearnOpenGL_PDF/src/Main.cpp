@@ -250,6 +250,17 @@ int main()
 		shader.SetVec3("dirLight.ambient", 0.1f, 0.1f, 0.1f);
 		shader.SetVec3("dirLight.diffuse", 0.8f, 0.8f, 0.8f);
 		shader.SetVec3("dirLight.specular", 1.0f, 1.0f, 1.0f);
+		// SpotLight
+		shader.SetVec3("spotLight.position", camera.Position);
+		shader.SetVec3("spotLight.direction", camera.Front);
+		shader.SetFloat("spotLight.innerCutoff", cos(glm::radians(15.0f)));
+		shader.SetFloat("spotLight.outerCutoff", cos(glm::radians(18.0f)));
+		shader.SetVec3("spotLight.ambient", 0.1f, 0.1f, 0.1f);
+		shader.SetVec3("spotLight.diffuse", 0.8f, 0.8f, 0.8f);
+		shader.SetVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
+		shader.SetFloat("spotLight.constant", 1.0f);
+		shader.SetFloat("spotLight.linear", 0.09f);
+		shader.SetFloat("spotLight.quadratic", 0.032f);
 		// Point Light 1
 		shader.SetVec3("pointLight[0].position", pointLightPositions[0]);
 		shader.SetVec3("pointLight[0].ambient", 0.1f, 0.1f, 0.1f);

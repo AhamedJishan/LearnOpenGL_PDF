@@ -70,6 +70,7 @@ uniform vec3 viewPos;
 // --------------------
 vec3 CalculateDirectionalLighting(DirectionalLight light, vec3 normal, vec3 viewDir);
 vec3 CalculatePointLighting(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
+vec3 CalculateSpotLighting(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
 void main()
 {
@@ -78,6 +79,7 @@ void main()
 
 	vec3 result;
 	result = CalculateDirectionalLighting(dirLight, norm, viewDir);
+	result += CalculateSpotLighting(spotLight, norm, FragPos,  viewDir);
 	for(int i = 0; i < NR_POINT_LIGHTS; i++)
 		result += CalculatePointLighting(pointLight[i], norm, FragPos, viewDir);
 
@@ -120,6 +122,34 @@ vec3 CalculatePointLighting(PointLight light, vec3 normal, vec3 fragPos, vec3 vi
 	// Combine results
 	vec3 diffuse = attenuation * diff * vec3(texture(material.diffuse, TexCoords));
 	vec3 specular = attenuation * spec * vec3(texture(material.specular, TexCoords));
+
+	return (diffuse + specular);
+}
+
+vec3 CalculateSpotLighting(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
+{
+	vec3 lightDir = normalize(light.direction);
+	vec3 fragDir = normalize(fragPos - light.position);
+
+	// Intensity: 1 when inside innerCutoff; 0 when outside outcutoff, and 0-1 when between inner and outer cutoff
+	float theta = dot(lightDir, fragDir);
+	float epsilon = light.innerCutoff - light.outerCutoff;
+	float intensity = clamp((theta - light.outerCutoff) / epsilon, 0.0f, 1.0f);
+
+	// diffuse shading
+	float diff = max(dot(lightDir, fragDir), 0.0f);
+
+	// specular shading
+	vec3 reflectDir = normalize(reflect(-lightDir, normal));
+	float spec = pow(dot(reflectDir, viewDir), material.shininess);
+
+	// attenuation
+	float distance = length(light.position - FragPos);
+	float attenuation = 1 / (light.constant + light.linear * distance + light.quadratic * distance);
+
+	// Combine results
+	vec3 diffuse = diff * attenuation * intensity * vec3(texture(material.diffuse, TexCoords));
+	vec3 specular = spec * attenuation * intensity * vec3(texture(material.specular, TexCoords));
 
 	return (diffuse + specular);
 }
