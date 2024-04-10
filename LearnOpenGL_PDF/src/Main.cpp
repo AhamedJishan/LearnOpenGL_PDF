@@ -248,7 +248,7 @@ int main()
 		// Directional Lights
 		shader.SetVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
 		shader.SetVec3("dirLight.ambient", 0.1f, 0.1f, 0.1f);
-		shader.SetVec3("dirLight.diffuse", 0.8f, 0.8f, 0.8f);
+		shader.SetVec3("dirLight.diffuse", 0.5f, 0.5f, 0.5f);
 		shader.SetVec3("dirLight.specular", 1.0f, 1.0f, 1.0f);
 		// SpotLight
 		shader.SetVec3("spotLight.position", camera.Position);
@@ -256,7 +256,7 @@ int main()
 		shader.SetFloat("spotLight.innerCutoff", cos(glm::radians(15.0f)));
 		shader.SetFloat("spotLight.outerCutoff", cos(glm::radians(18.0f)));
 		shader.SetVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
-		shader.SetVec3("spotLight.diffuse", 0.5f, 0.5f, 0.5f);
+		shader.SetVec3("spotLight.diffuse", 0.8f, 0.8f, 0.8f);
 		shader.SetVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
 		shader.SetFloat("spotLight.constant", 1.0f);
 		shader.SetFloat("spotLight.linear", 0.09f);
@@ -264,7 +264,7 @@ int main()
 		// Point Light 1
 		shader.SetVec3("pointLight[0].position", pointLightPositions[0]);
 		shader.SetVec3("pointLight[0].ambient", 0.1f, 0.1f, 0.1f);
-		shader.SetVec3("pointLight[0].diffuse", 0.8f, 0.8f, 0.8f);
+		shader.SetVec3("pointLight[0].diffuse", 0.5f, 0.5f, 0.5f);
 		shader.SetVec3("pointLight[0].specular", 1.0f, 1.0f, 1.0f);
 		shader.SetFloat("pointLight[0].constant", 1.0f);
 		shader.SetFloat("pointLight[0].linear", 0.09f);
@@ -272,7 +272,7 @@ int main()
 		// Point Light 2
 		shader.SetVec3("pointLight[1].position", pointLightPositions[1]);
 		shader.SetVec3("pointLight[1].ambient", 0.1f, 0.1f, 0.1f);
-		shader.SetVec3("pointLight[1].diffuse", 0.8f, 0.8f, 0.8f);
+		shader.SetVec3("pointLight[1].diffuse", 0.5f, 0.5f, 0.5f);
 		shader.SetVec3("pointLight[1].specular", 1.0f, 1.0f, 1.0f);
 		shader.SetFloat("pointLight[1].constant", 1.0f);
 		shader.SetFloat("pointLight[1].linear", 0.09f);
@@ -280,7 +280,7 @@ int main()
 		// Point Light 3
 		shader.SetVec3("pointLight[2].position", pointLightPositions[2]);
 		shader.SetVec3("pointLight[2].ambient", 0.1f, 0.1f, 0.1f);
-		shader.SetVec3("pointLight[2].diffuse", 0.8f, 0.8f, 0.8f);
+		shader.SetVec3("pointLight[2].diffuse", 0.5f, 0.5f, 0.5f);
 		shader.SetVec3("pointLight[2].specular", 1.0f, 1.0f, 1.0f);
 		shader.SetFloat("pointLight[2].constant", 1.0f);
 		shader.SetFloat("pointLight[2].linear", 0.09f);
@@ -288,7 +288,7 @@ int main()
 		// Point Light 4
 		shader.SetVec3("pointLight[3].position", pointLightPositions[3]);
 		shader.SetVec3("pointLight[3].ambient", 0.1f, 0.1f, 0.1f);
-		shader.SetVec3("pointLight[3].diffuse", 0.8f, 0.8f, 0.8f);
+		shader.SetVec3("pointLight[3].diffuse", 0.5f, 0.5f, 0.5f);
 		shader.SetVec3("pointLight[3].specular", 1.0f, 1.0f, 1.0f);
 		shader.SetFloat("pointLight[3].constant", 1.0f);
 		shader.SetFloat("pointLight[3].linear", 0.09f);
