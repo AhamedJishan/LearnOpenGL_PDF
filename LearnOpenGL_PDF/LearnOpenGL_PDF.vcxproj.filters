@@ -35,12 +35,17 @@
     <ClInclude Include="src\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\res\shaders\vertex.vert" />
     <None Include="src\res\shaders\fragment.frag" />
     <None Include="src\res\shaders\lightFragment.frag" />
     <None Include="src\res\shaders\pointLight.frag" />
+    <None Include="src\res\shaders\multipleLights.frag" />
+    <None Include="src\res\shaders\spotlight.frag" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\res\textures\container.jpg">
