@@ -21,6 +21,7 @@ struct Texture
 {
 	unsigned int Id;
 	std::string type;
+	std::string path;
 };
 
 class Mesh
