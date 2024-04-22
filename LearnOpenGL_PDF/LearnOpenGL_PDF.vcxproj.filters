@@ -49,6 +49,8 @@
     <None Include="src\res\shaders\pointLight.frag" />
     <None Include="src\res\shaders\multipleLights.frag" />
     <None Include="src\res\shaders\spotlight.frag" />
+    <None Include="src\res\shaders\model_loading.frag" />
+    <None Include="src\res\shaders\model_loading.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\res\textures\container.jpg">

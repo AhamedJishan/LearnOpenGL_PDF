@@ -9,6 +9,7 @@
 
 #include "Shader.h"
 #include "Camera.h"
+#include "Model.h"
 
 void ProcessInputs(GLFWwindow* window);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -175,22 +176,13 @@ int main()
 	stbi_set_flip_vertically_on_load(true);
 	glEnable(GL_DEPTH_TEST);
 
-	Shader shader("src/res/shaders/vertex.vert", "src/res/shaders/multipleLights.frag");
-	Shader lightShader("src/res/shaders/vertex.vert", "src/res/shaders/lightFragment.frag");
+	// build and compile shaders
+	// -------------------------
+	Shader shader("src/res/shaders/model_loading.vert", "src/res/shaders/model_loading.frag");
 
-	unsigned int diffuseMap = LoadTexture("src/res/textures/container2.png");
-	unsigned int specularMap = LoadTexture("src/res/textures/container2_specular.png");
-
-	shader.Use();
-
-	// Bind textures on corresponding texture units
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, diffuseMap);
-	shader.SetInt("material.diffuse", 0);
-
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, specularMap);
-	shader.SetInt("material.specular", 1);
+	// load models
+	// -----------
+	Model bag("src/res/models/backpack/backpack.obj");
 
 	// Render Loop
 	while (!glfwWindowShouldClose(window))
@@ -213,105 +205,18 @@ int main()
 		// Activate shader
 		shader.Use();
 
-		// pass projection matrix to shader (note that in this case it could change every frame)
-		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH/SCR_HEIGHT, 0.1f, 100.0f);
-		shader.SetMat4("projection", projection);
-
-		// camera/view transformation
+		// view/projection transformations
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		glm::mat4 view = camera.GetViewMatrix();
+		shader.SetMat4("projection", projection);
 		shader.SetMat4("view", view);
 
+		// render the loaded model
 		glm::mat4 model = glm::mat4(1.0f);
-
-		// render containers
-		glBindVertexArray(VAO);
-		for (unsigned int i = 0; i < 10; i++)
-		{
-			// calculate the model matrix for each object and pass it to shader before drawing
-			model = glm::mat4(1.0f);
-			model = glm::translate(model, cubePositions[i]);
-			float angle = 20.0f * i;
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-			shader.SetMat4("model", model);
-
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
-
-		/*shader.SetVec3("light.position", camera.Position);
-		shader.SetVec3("light.direction", camera.Front);
-		shader.SetFloat("light.innerCutoff", cos(glm::radians(15.0f)));
-		shader.SetFloat("light.outerCutoff", cos(glm::radians(18.0f)));*/
-
-		shader.SetFloat("material.shininess", 32.0f);
-		shader.SetVec3("viewPos", camera.Position);
-
-		// Directional Lights
-		shader.SetVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
-		shader.SetVec3("dirLight.ambient", 0.1f, 0.1f, 0.1f);
-		shader.SetVec3("dirLight.diffuse", 0.5f, 0.5f, 0.5f);
-		shader.SetVec3("dirLight.specular", 1.0f, 1.0f, 1.0f);
-		// SpotLight
-		shader.SetVec3("spotLight.position", camera.Position);
-		shader.SetVec3("spotLight.direction", camera.Front);
-		shader.SetFloat("spotLight.innerCutoff", cos(glm::radians(15.0f)));
-		shader.SetFloat("spotLight.outerCutoff", cos(glm::radians(18.0f)));
-		shader.SetVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
-		shader.SetVec3("spotLight.diffuse", 0.8f, 0.8f, 0.8f);
-		shader.SetVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
-		shader.SetFloat("spotLight.constant", 1.0f);
-		shader.SetFloat("spotLight.linear", 0.09f);
-		shader.SetFloat("spotLight.quadratic", 0.032f);
-		// Point Light 1
-		shader.SetVec3("pointLight[0].position", pointLightPositions[0]);
-		shader.SetVec3("pointLight[0].ambient", 0.1f, 0.1f, 0.1f);
-		shader.SetVec3("pointLight[0].diffuse", 0.5f, 0.5f, 0.5f);
-		shader.SetVec3("pointLight[0].specular", 1.0f, 1.0f, 1.0f);
-		shader.SetFloat("pointLight[0].constant", 1.0f);
-		shader.SetFloat("pointLight[0].linear", 0.09f);
-		shader.SetFloat("pointLight[0].quadratic", 0.032f);
-		// Point Light 2
-		shader.SetVec3("pointLight[1].position", pointLightPositions[1]);
-		shader.SetVec3("pointLight[1].ambient", 0.1f, 0.1f, 0.1f);
-		shader.SetVec3("pointLight[1].diffuse", 0.5f, 0.5f, 0.5f);
-		shader.SetVec3("pointLight[1].specular", 1.0f, 1.0f, 1.0f);
-		shader.SetFloat("pointLight[1].constant", 1.0f);
-		shader.SetFloat("pointLight[1].linear", 0.09f);
-		shader.SetFloat("pointLight[1].quadratic", 0.032f);
-		// Point Light 3
-		shader.SetVec3("pointLight[2].position", pointLightPositions[2]);
-		shader.SetVec3("pointLight[2].ambient", 0.1f, 0.1f, 0.1f);
-		shader.SetVec3("pointLight[2].diffuse", 0.5f, 0.5f, 0.5f);
-		shader.SetVec3("pointLight[2].specular", 1.0f, 1.0f, 1.0f);
-		shader.SetFloat("pointLight[2].constant", 1.0f);
-		shader.SetFloat("pointLight[2].linear", 0.09f);
-		shader.SetFloat("pointLight[2].quadratic", 0.032f);
-		// Point Light 4
-		shader.SetVec3("pointLight[3].position", pointLightPositions[3]);
-		shader.SetVec3("pointLight[3].ambient", 0.1f, 0.1f, 0.1f);
-		shader.SetVec3("pointLight[3].diffuse", 0.5f, 0.5f, 0.5f);
-		shader.SetVec3("pointLight[3].specular", 1.0f, 1.0f, 1.0f);
-		shader.SetFloat("pointLight[3].constant", 1.0f);
-		shader.SetFloat("pointLight[3].linear", 0.09f);
-		shader.SetFloat("pointLight[3].quadratic", 0.032f);
-
-
-		// Activate shader
-		lightShader.Use();
-
-		lightShader.SetMat4("projection", projection);
-		lightShader.SetMat4("view", view);
-
-		for (int i = 0; i < 4; i++)
-		{
-			// model transformation
-			model = glm::translate(glm::mat4(1.0f), pointLightPositions[i]);
-			model = glm::scale(model, glm::vec3(0.2f));
-			lightShader.SetMat4("model", model);
-
-			// Render Box
-			glBindVertexArray(lightVAO);
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+		shader.SetMat4("model", model);
+		bag.Draw(shader);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
