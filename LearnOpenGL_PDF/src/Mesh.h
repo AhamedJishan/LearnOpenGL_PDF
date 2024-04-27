@@ -19,6 +19,7 @@ struct Texture
 {
 	unsigned int ID;
 	std::string type;
+	std::string path;
 };
 
 class Mesh
@@ -46,8 +47,8 @@ public:
 		{
 			glActiveTexture(GL_TEXTURE0 + i);
 
-			string number;
-			string name = textures[i].type;
+			std::string number;
+			std::string name = textures[i].type;
 
 			if (name == "texture_diffuse")
 				number = std::to_string(diffuseNr++);
