@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -31,72 +32,7 @@ float lastX = SCR_WIDTH / 2;
 float lastY = SCR_HEIGHT / 2;
 bool firstMouse = true;
 
-// set up vertex data (and buffer(s)) and configure vertex attributes
-// ------------------------------------------------------------------
-const float vertices[] = {
-	// positions          // normals           // texture coords
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
 
-	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
-
-	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-	-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-	-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
-	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-
-	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
-
-	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
-};
-// world space positions of our cubes
-glm::vec3 cubePositions[] = {
-		glm::vec3(0.0f,  0.0f,  0.0f),
-		glm::vec3(2.0f,  5.0f, -15.0f),
-		glm::vec3(-1.5f, -2.2f, -2.5f),
-		glm::vec3(-3.8f, -2.0f, -12.3f),
-		glm::vec3(2.4f, -0.4f, -3.5f),
-		glm::vec3(-1.7f,  3.0f, -7.5f),
-		glm::vec3(1.3f, -2.0f, -2.5f),
-		glm::vec3(1.5f,  2.0f, -2.5f),
-		glm::vec3(1.5f,  0.2f, -1.5f),
-		glm::vec3(-1.3f,  1.0f, -1.5f)
-};
-// light positions
-glm::vec3 pointLightPositions[] = {
-	 glm::vec3(0.7f, 0.2f, 2.0f),
-	 glm::vec3(2.3f,-3.3f,-4.0f),
-	 glm::vec3(-4.0f, 2.0f,-12.0f),
-	 glm::vec3(0.0f, 0.0f,-3.0f)
-};
 
 
 int main()
@@ -124,6 +60,8 @@ int main()
 	}
 	glfwMakeContextCurrent(window);
 
+	// Setting up all glfw callback functions
+	// --------------------------------------
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
@@ -142,11 +80,123 @@ int main()
 
 	// build and compile shaders
 	// -------------------------
-	Shader shader("src/res/shaders/model_loading.vert", "src/res/shaders/model_loading.frag");
+	Shader shader("src/res/shaders/blend_discard.vert", "src/res/shaders/blend_discard.frag");
 
-	// load models
-	// -----------
-	Model bag("src/res/models/backpack/backpack.obj");
+	// set up cube vertex data (and buffer(s)) and configure vertex attributes
+	// ------------------------------------------------------------------
+	const float cubeVertices[] = {
+		// positions			// texture coords
+		-0.5f, -0.5f, -0.5f,	0.0f,  0.0f,
+		 0.5f, -0.5f, -0.5f,	1.0f,  0.0f,
+		 0.5f,  0.5f, -0.5f,	1.0f,  1.0f,
+		 0.5f,  0.5f, -0.5f,	1.0f,  1.0f,
+		-0.5f,  0.5f, -0.5f,	0.0f,  1.0f,
+		-0.5f, -0.5f, -0.5f,	0.0f,  0.0f,
+
+		-0.5f, -0.5f,  0.5f,	0.0f,  0.0f,
+		 0.5f, -0.5f,  0.5f,	1.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,	1.0f,  1.0f,
+		 0.5f,  0.5f,  0.5f,	1.0f,  1.0f,
+		-0.5f,  0.5f,  0.5f,	0.0f,  1.0f,
+		-0.5f, -0.5f,  0.5f,	0.0f,  0.0f,
+
+		-0.5f,  0.5f,  0.5f,	1.0f,  0.0f,
+		-0.5f,  0.5f, -0.5f,	1.0f,  1.0f,
+		-0.5f, -0.5f, -0.5f,	0.0f,  1.0f,
+		-0.5f, -0.5f, -0.5f,	0.0f,  1.0f,
+		-0.5f, -0.5f,  0.5f,	0.0f,  0.0f,
+		-0.5f,  0.5f,  0.5f,	1.0f,  0.0f,
+
+		 0.5f,  0.5f,  0.5f,	1.0f,  0.0f,
+		 0.5f,  0.5f, -0.5f,	1.0f,  1.0f,
+		 0.5f, -0.5f, -0.5f,	0.0f,  1.0f,
+		 0.5f, -0.5f, -0.5f,	0.0f,  1.0f,
+		 0.5f, -0.5f,  0.5f,	0.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,	1.0f,  0.0f,
+
+		-0.5f, -0.5f, -0.5f,	0.0f,  1.0f,
+		 0.5f, -0.5f, -0.5f,	1.0f,  1.0f,
+		 0.5f, -0.5f,  0.5f,	1.0f,  0.0f,
+		 0.5f, -0.5f,  0.5f,	1.0f,  0.0f,
+		-0.5f, -0.5f,  0.5f,	0.0f,  0.0f,
+		-0.5f, -0.5f, -0.5f,	0.0f,  1.0f,
+
+		-0.5f,  0.5f, -0.5f,	0.0f,  1.0f,
+		 0.5f,  0.5f, -0.5f,	1.0f,  1.0f,
+		 0.5f,  0.5f,  0.5f,	1.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,	1.0f,  0.0f,
+		-0.5f,  0.5f,  0.5f,	0.0f,  0.0f,
+		-0.5f,  0.5f, -0.5f,	0.0f,  1.0f
+	};
+	const float planeVertices[] = {
+		// positions          // texture Coords 
+		 5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
+		-5.0f, -0.5f,  5.0f,  0.0f, 0.0f,
+		-5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
+
+		 5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
+		-5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
+		 5.0f, -0.5f, -5.0f,  2.0f, 2.0f
+	};
+	const float grassPlaneVertices[] = {
+		// positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
+		0.0f,  0.5f,  0.0f,  0.0f,  1.0f,
+		0.0f, -0.5f,  0.0f,  0.0f,  0.0f,
+		1.0f, -0.5f,  0.0f,  1.0f,  0.0f,
+
+		0.0f,  0.5f,  0.0f,  0.0f,  1.0f,
+		1.0f, -0.5f,  0.0f,  1.0f,  0.0f,
+		1.0f,  0.5f,  0.0f,  1.0f,  1.0f
+	};
+	// Cube VAO
+	unsigned int cubeVAO, cubeVBO;
+	glGenVertexArrays(1, &cubeVAO);
+	glGenBuffers(1, &cubeVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
+	glBindVertexArray(cubeVAO);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3*sizeof(float)) );
+	// Plane VAO
+	unsigned int planeVAO, planeVBO;
+	glGenVertexArrays(1, &planeVAO);
+	glGenBuffers(1, &planeVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
+	glBindVertexArray(planeVAO);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	// Grass plane VAO
+	unsigned int grassPlaneVAO, grassPlaneVBO;
+	glGenVertexArrays(1, &grassPlaneVAO);
+	glGenBuffers(1, &grassPlaneVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, grassPlaneVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), grassPlaneVertices, GL_STATIC_DRAW);
+	glBindVertexArray(grassPlaneVAO);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+
+	// List of grass locations
+	std::vector<glm::vec3> grassPositions
+	{
+		glm::vec3(-1.5f, 0.0f, -0.48f),
+		glm::vec3(1.5f, 0.0f, 0.51f),
+		glm::vec3(0.0f, 0.0f, 0.7f),
+		glm::vec3(-0.3f, 0.0f, -2.3f),
+		glm::vec3(0.5f, 0.0f, -0.6f)
+	};
+
+	// Load Textures
+	// -------------
+	unsigned int marbleTexture = LoadTexture("src/res/textures/marble.jpg");
+	unsigned int metalTexture = LoadTexture("src/res/textures/metal.png");
+	unsigned int grassTexture = LoadTexture("src/res/textures/grass.png");
 
 	// Render Loop
 	while (!glfwWindowShouldClose(window))
@@ -172,15 +222,40 @@ int main()
 		// view/projection transformations
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		glm::mat4 view = camera.GetViewMatrix();
+		glm::mat4 model = glm::mat4(1.0f);
 		shader.SetMat4("projection", projection);
 		shader.SetMat4("view", view);
 
-		// render the loaded model
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+		// Plane
+		glBindVertexArray(planeVAO);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, metalTexture);
+		model = glm::mat4(1.0f);
 		shader.SetMat4("model", model);
-		bag.Draw(shader);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		// Cubes
+		glBindVertexArray(cubeVAO);
+		glBindTexture(GL_TEXTURE_2D, marbleTexture);
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+		shader.SetMat4("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+		shader.SetMat4("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		// Grass
+		glBindVertexArray(grassPlaneVAO);
+		glBindTexture(GL_TEXTURE_2D, grassTexture);
+		for (int i = 0; i < grassPositions.size(); i++)
+		{
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, grassPositions[i]);
+			shader.SetMat4("model", model);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		}
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
@@ -269,8 +344,17 @@ unsigned int LoadTexture(const char* path)
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		if (format == GL_RGBA)
+		{
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		}
+		else
+		{
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
+		}
+		
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	}

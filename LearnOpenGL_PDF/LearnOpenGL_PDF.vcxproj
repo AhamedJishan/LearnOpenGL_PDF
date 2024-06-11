@@ -167,20 +167,14 @@
     <ClInclude Include="src\vendor\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\res\shaders\fragment.frag" />
-    <None Include="src\res\shaders\lightFragment.frag" />
-    <None Include="src\res\shaders\model_loading.frag" />
-    <None Include="src\res\shaders\model_loading.vert" />
-    <None Include="src\res\shaders\multipleLights.frag" />
-    <None Include="src\res\shaders\pointLight.frag" />
-    <None Include="src\res\shaders\spotlight.frag" />
-    <None Include="src\res\shaders\vertex.vert" />
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="src\res\textures\awesomeface.png" />
     <Image Include="src\res\textures\container.jpg" />
     <Image Include="src\res\textures\container2.png" />
     <Image Include="src\res\textures\container2_specular.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\res\shaders\blend_discard.frag" />
+    <None Include="src\res\shaders\blend_discard.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
