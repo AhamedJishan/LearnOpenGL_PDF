@@ -57,7 +57,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\res\shaders\blend_discard.vert" />
-    <None Include="src\res\shaders\blend_discard.frag" />
+    <None Include="src\res\shaders\vertex.vert" />
+    <None Include="src\res\shaders\fragment.frag" />
   </ItemGroup>
 </Project>

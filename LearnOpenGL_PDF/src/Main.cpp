@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <map>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -76,11 +77,14 @@ int main()
 	}
 
 	stbi_set_flip_vertically_on_load(true);
+
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// build and compile shaders
 	// -------------------------
-	Shader shader("src/res/shaders/blend_discard.vert", "src/res/shaders/blend_discard.frag");
+	Shader shader("src/res/shaders/vertex.vert", "src/res/shaders/fragment.frag");
 
 	// set up cube vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
@@ -138,7 +142,7 @@ int main()
 		-5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
 		 5.0f, -0.5f, -5.0f,  2.0f, 2.0f
 	};
-	const float grassPlaneVertices[] = {
+	const float windowPlaneVertices[] = {
 		// positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
 		0.0f,  0.5f,  0.0f,  0.0f,  1.0f,
 		0.0f, -0.5f,  0.0f,  0.0f,  0.0f,
@@ -170,20 +174,20 @@ int main()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	// Grass plane VAO
-	unsigned int grassPlaneVAO, grassPlaneVBO;
-	glGenVertexArrays(1, &grassPlaneVAO);
-	glGenBuffers(1, &grassPlaneVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, grassPlaneVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), grassPlaneVertices, GL_STATIC_DRAW);
-	glBindVertexArray(grassPlaneVAO);
+	// Window plane VAO
+	unsigned int windowPlaneVAO, windowPlaneVBO;
+	glGenVertexArrays(1, &windowPlaneVAO);
+	glGenBuffers(1, &windowPlaneVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, windowPlaneVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), windowPlaneVertices, GL_STATIC_DRAW);
+	glBindVertexArray(windowPlaneVAO);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 
-	// List of grass locations
-	std::vector<glm::vec3> grassPositions
+	// List of window locations
+	std::vector<glm::vec3> windowPositions
 	{
 		glm::vec3(-1.5f, 0.0f, -0.48f),
 		glm::vec3(1.5f, 0.0f, 0.51f),
@@ -196,7 +200,14 @@ int main()
 	// -------------
 	unsigned int marbleTexture = LoadTexture("src/res/textures/marble.jpg");
 	unsigned int metalTexture = LoadTexture("src/res/textures/metal.png");
-	unsigned int grassTexture = LoadTexture("src/res/textures/grass.png");
+	unsigned int windowTexture = LoadTexture("src/res/textures/window.png");
+
+	std::map<float, glm::vec3> sortedWindows;
+	for (unsigned int i = 0; i < windowPositions.size(); i++)
+	{
+		float distance = glm::length(camera.Position - windowPositions[i]);
+		sortedWindows[distance] = windowPositions[i];
+	}
 
 	// Render Loop
 	while (!glfwWindowShouldClose(window))
@@ -246,13 +257,13 @@ int main()
 		shader.SetMat4("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
-		// Grass
-		glBindVertexArray(grassPlaneVAO);
-		glBindTexture(GL_TEXTURE_2D, grassTexture);
-		for (int i = 0; i < grassPositions.size(); i++)
+		// Window
+		glBindVertexArray(windowPlaneVAO);
+		glBindTexture(GL_TEXTURE_2D, windowTexture);
+		for (auto rit = sortedWindows.rbegin(); rit != sortedWindows.rend(); rit++)
 		{
 			model = glm::mat4(1.0f);
-			model = glm::translate(model, grassPositions[i]);
+			model = glm::translate(model, rit->second);
 			shader.SetMat4("model", model);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
