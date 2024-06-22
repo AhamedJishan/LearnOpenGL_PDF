@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <string>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -202,15 +203,10 @@ int main()
 	unsigned int metalTexture = LoadTexture("src/res/textures/metal.png");
 	unsigned int windowTexture = LoadTexture("src/res/textures/window.png");
 
-	std::map<float, glm::vec3> sortedWindows;
-	for (unsigned int i = 0; i < windowPositions.size(); i++)
-	{
-		float distance = glm::length(camera.Position - windowPositions[i]);
-		sortedWindows[distance] = windowPositions[i];
-	}
-
 	int fpsCounter = 0;
 	float timeSinceFPS = 0.f;
+	std::string fps;
+	std::string newTitle;
 	// Render Loop
 	while (!glfwWindowShouldClose(window))
 	{
@@ -222,9 +218,11 @@ int main()
 		// FPS calculations
 		fpsCounter++;
 		timeSinceFPS += deltaTime;
-		if (timeSinceFPS>=1.0f)
+		if (timeSinceFPS>=1.f)
 		{
-			std::cout << fpsCounter / timeSinceFPS << " FPS\n";
+			fps = std::to_string((int)(fpsCounter / timeSinceFPS));
+			newTitle = "LearnOpneGL		FPS: " + fps;
+			glfwSetWindowTitle(window, newTitle.c_str());
 			fpsCounter = 0;
 			timeSinceFPS = 0.f;
 		}
@@ -271,6 +269,13 @@ int main()
 
 
 		glDisable(GL_CULL_FACE);
+
+		std::map<float, glm::vec3> sortedWindows;
+		for (unsigned int i = 0; i < windowPositions.size(); i++)
+		{
+			float distance = glm::length(camera.Position - windowPositions[i]);
+			sortedWindows[distance] = windowPositions[i];
+		}
 
 		// Window
 		glBindVertexArray(windowPlaneVAO);
