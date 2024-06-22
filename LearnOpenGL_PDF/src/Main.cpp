@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <string>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -52,7 +53,7 @@ int main()
 
 	// glfw window creation
 	// --------------------
-	GLFWwindow *window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
 	if (!window)
 	{
 		std::cout << "Failed to create window!\n";
@@ -88,59 +89,59 @@ int main()
 
 	// set up cube vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
-	const float cubeVertices[] = {
-		// positions			// texture coords
-		-0.5f, -0.5f, -0.5f,	0.0f,  0.0f,
-		 0.5f, -0.5f, -0.5f,	1.0f,  0.0f,
-		 0.5f,  0.5f, -0.5f,	1.0f,  1.0f,
-		 0.5f,  0.5f, -0.5f,	1.0f,  1.0f,
-		-0.5f,  0.5f, -0.5f,	0.0f,  1.0f,
-		-0.5f, -0.5f, -0.5f,	0.0f,  0.0f,
-
-		-0.5f, -0.5f,  0.5f,	0.0f,  0.0f,
-		 0.5f, -0.5f,  0.5f,	1.0f,  0.0f,
-		 0.5f,  0.5f,  0.5f,	1.0f,  1.0f,
-		 0.5f,  0.5f,  0.5f,	1.0f,  1.0f,
-		-0.5f,  0.5f,  0.5f,	0.0f,  1.0f,
-		-0.5f, -0.5f,  0.5f,	0.0f,  0.0f,
-
-		-0.5f,  0.5f,  0.5f,	1.0f,  0.0f,
-		-0.5f,  0.5f, -0.5f,	1.0f,  1.0f,
-		-0.5f, -0.5f, -0.5f,	0.0f,  1.0f,
-		-0.5f, -0.5f, -0.5f,	0.0f,  1.0f,
-		-0.5f, -0.5f,  0.5f,	0.0f,  0.0f,
-		-0.5f,  0.5f,  0.5f,	1.0f,  0.0f,
-
-		 0.5f,  0.5f,  0.5f,	1.0f,  0.0f,
-		 0.5f,  0.5f, -0.5f,	1.0f,  1.0f,
-		 0.5f, -0.5f, -0.5f,	0.0f,  1.0f,
-		 0.5f, -0.5f, -0.5f,	0.0f,  1.0f,
-		 0.5f, -0.5f,  0.5f,	0.0f,  0.0f,
-		 0.5f,  0.5f,  0.5f,	1.0f,  0.0f,
-
-		-0.5f, -0.5f, -0.5f,	0.0f,  1.0f,
-		 0.5f, -0.5f, -0.5f,	1.0f,  1.0f,
-		 0.5f, -0.5f,  0.5f,	1.0f,  0.0f,
-		 0.5f, -0.5f,  0.5f,	1.0f,  0.0f,
-		-0.5f, -0.5f,  0.5f,	0.0f,  0.0f,
-		-0.5f, -0.5f, -0.5f,	0.0f,  1.0f,
-
-		-0.5f,  0.5f, -0.5f,	0.0f,  1.0f,
-		 0.5f,  0.5f, -0.5f,	1.0f,  1.0f,
-		 0.5f,  0.5f,  0.5f,	1.0f,  0.0f,
-		 0.5f,  0.5f,  0.5f,	1.0f,  0.0f,
-		-0.5f,  0.5f,  0.5f,	0.0f,  0.0f,
-		-0.5f,  0.5f, -0.5f,	0.0f,  1.0f
+	float cubeVertices[] = {
+		// Back face
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom-left
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
+		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // bottom-right         
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // bottom-left
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+		// Front face
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
+		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // top-left
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+		// Left face
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-left
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
+		// Right face
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right         
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
+		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left     
+		 // Bottom face
+		 -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
+		  0.5f, -0.5f, -0.5f,  1.0f, 1.0f, // top-left
+		  0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
+		  0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
+		 -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
+		 -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
+		 // Top face
+		 -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+		  0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+		  0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right     
+		  0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+		 -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+		 -0.5f,  0.5f,  0.5f,  0.0f, 0.0f  // bottom-left        
 	};
 	const float planeVertices[] = {
 		// positions          // texture Coords 
-		 5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
 		-5.0f, -0.5f,  5.0f,  0.0f, 0.0f,
+		 5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
 		-5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
 
 		 5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
-		-5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
-		 5.0f, -0.5f, -5.0f,  2.0f, 2.0f
+		 5.0f, -0.5f, -5.0f,  2.0f, 2.0f,
+		-5.0f, -0.5f, -5.0f,  0.0f, 2.0f
 	};
 	const float windowPlaneVertices[] = {
 		// positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
@@ -162,7 +163,7 @@ int main()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3*sizeof(float)) );
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	// Plane VAO
 	unsigned int planeVAO, planeVBO;
 	glGenVertexArrays(1, &planeVAO);
@@ -202,13 +203,10 @@ int main()
 	unsigned int metalTexture = LoadTexture("src/res/textures/metal.png");
 	unsigned int windowTexture = LoadTexture("src/res/textures/window.png");
 
-	std::map<float, glm::vec3> sortedWindows;
-	for (unsigned int i = 0; i < windowPositions.size(); i++)
-	{
-		float distance = glm::length(camera.Position - windowPositions[i]);
-		sortedWindows[distance] = windowPositions[i];
-	}
-
+	int fpsCounter = 0;
+	float timeSinceFPS = 0.f;
+	std::string fps;
+	std::string newTitle;
 	// Render Loop
 	while (!glfwWindowShouldClose(window))
 	{
@@ -217,6 +215,17 @@ int main()
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
+		// FPS calculations
+		fpsCounter++;
+		timeSinceFPS += deltaTime;
+		if (timeSinceFPS >= 1.f)
+		{
+			fps = std::to_string((int)(fpsCounter / timeSinceFPS));
+			newTitle = "LearnOpneGL		FPS: " + fps;
+			glfwSetWindowTitle(window, newTitle.c_str());
+			fpsCounter = 0;
+			timeSinceFPS = 0.f;
+		}
 
 		// Inputs
 		// ------
@@ -229,6 +238,7 @@ int main()
 
 		// Activate shader
 		shader.Use();
+		glEnable(GL_CULL_FACE);
 
 		// view/projection transformations
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -257,6 +267,16 @@ int main()
 		shader.SetMat4("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+
+		glDisable(GL_CULL_FACE);
+
+		std::map<float, glm::vec3> sortedWindows;
+		for (unsigned int i = 0; i < windowPositions.size(); i++)
+		{
+			float distance = glm::length(camera.Position - windowPositions[i]);
+			sortedWindows[distance] = windowPositions[i];
+		}
+
 		// Window
 		glBindVertexArray(windowPlaneVAO);
 		glBindTexture(GL_TEXTURE_2D, windowTexture);
@@ -273,7 +293,7 @@ int main()
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-	
+
 	glfwTerminate();
 	return 0;
 }
@@ -347,7 +367,7 @@ unsigned int LoadTexture(const char* path)
 	if (data)
 	{
 		GLenum format;
-		if      (nrComponents == 1) format = GL_RED;
+		if (nrComponents == 1) format = GL_RED;
 		else if (nrComponents == 3) format = GL_RGB;
 		else if (nrComponents == 4) format = GL_RGBA;
 
@@ -365,7 +385,7 @@ unsigned int LoadTexture(const char* path)
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
 		}
-		
+
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	}
