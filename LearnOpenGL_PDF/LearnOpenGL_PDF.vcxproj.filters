@@ -59,5 +59,9 @@
   <ItemGroup>
     <None Include="src\res\shaders\vertex.vert" />
     <None Include="src\res\shaders\fragment.frag" />
+    <None Include="src\res\shaders\screenShader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\res\shaders\screenShader.frag" />
   </ItemGroup>
 </Project>
