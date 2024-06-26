@@ -173,9 +173,11 @@
     <Image Include="src\res\textures\container2_specular.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\res\shaders\fragment.frag" />
+    <None Include="src\res\shaders\default.frag" />
+    <None Include="src\res\shaders\reflection.frag" />
+    <None Include="src\res\shaders\reflection.vert" />
     <None Include="src\res\shaders\skyboxShader.vert" />
-    <None Include="src\res\shaders\vertex.vert" />
+    <None Include="src\res\shaders\default.vert" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\res\shaders\skyboxShader.frag" />
