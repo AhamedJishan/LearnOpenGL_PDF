@@ -312,18 +312,6 @@ int main()
 		glClearColor(1.f, 1.f, 1.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// Render skybox
-		glDepthMask(GL_FALSE);
-		skyboxShader.Use();
-		skyboxShader.SetMat4("projection", projection);
-		view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
-		skyboxShader.SetMat4("view", view);
-		glBindVertexArray(skyboxVAO);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glDepthMask(GL_TRUE);
-
 		shader.Use();
 		shader.SetMat4("projection", projection);
 		view = camera.GetViewMatrix();
@@ -342,6 +330,18 @@ int main()
 		model = glm::translate(model, glm::vec3(2.f, 0.f, -1.f));
 		shader.SetMat4("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		// Render skybox
+		glDepthFunc(GL_LEQUAL);
+		skyboxShader.Use();
+		skyboxShader.SetMat4("projection", projection);
+		view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
+		skyboxShader.SetMat4("view", view);
+		glBindVertexArray(skyboxVAO);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glDepthFunc(GL_LESS);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
