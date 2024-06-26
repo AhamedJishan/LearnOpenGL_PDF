@@ -62,6 +62,8 @@
     <None Include="src\res\shaders\skyboxShader.vert" />
     <None Include="src\res\shaders\reflection.frag" />
     <None Include="src\res\shaders\reflection.vert" />
+    <None Include="src\res\shaders\refraction.frag" />
+    <None Include="src\res\shaders\refraction.vert" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\res\shaders\skyboxShader.frag" />

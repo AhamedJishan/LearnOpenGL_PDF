@@ -89,6 +89,7 @@ int main()
 	Shader shader("src/res/shaders/default.vert", "src/res/shaders/default.frag");
 	Shader skyboxShader("src/res/shaders/skyboxShader.vert", "src/res/shaders/skyboxShader.frag");
 	Shader reflectionShader("src/res/shaders/reflection.vert", "src/res/shaders/reflection.frag");
+	Shader refractionShader("src/res/shaders/refraction.vert", "src/res/shaders/refraction.frag");
 
 	// set up cube vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
@@ -246,6 +247,8 @@ int main()
 	skyboxShader.Use();
 	skyboxShader.SetInt("texture1", 0);
 
+	Model bag("src/res/models/backpack/backpack.obj");
+
 	// FPS Counter
 	// -----------
 	int fpsCounter = 0;
@@ -303,19 +306,26 @@ int main()
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		// Cubes
+		glBindVertexArray(cubeVAO);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
 		reflectionShader.Use();
 		reflectionShader.SetVec3("cameraPos", camera.Position);
 		reflectionShader.SetMat4("projection", projection);
 		view = camera.GetViewMatrix();
 		reflectionShader.SetMat4("view", view);
-		glBindVertexArray(cubeVAO);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
 		model = glm::translate(model, glm::vec3(-1.f, 0.f, -1.f));
 		reflectionShader.SetMat4("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
-		model = glm::translate(model, glm::vec3(2.f, 0.f, -1.f));
-		reflectionShader.SetMat4("model", model);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		refractionShader.Use();
+		refractionShader.SetVec3("cameraPos", camera.Position);
+		refractionShader.SetMat4("projection", projection);
+		reflectionShader.SetMat4("view", view);
+		model = glm::translate(model, glm::vec3(2.f, 0.2f, -1.f));
+		model = glm::scale(model, glm::vec3(.3f, .3f, .3f));
+		refractionShader.SetMat4("model", model);
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
+		bag.Draw(refractionShader);
 
 		// Render skybox
 		glDepthFunc(GL_LEQUAL);
