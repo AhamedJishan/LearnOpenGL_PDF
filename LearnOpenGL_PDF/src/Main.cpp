@@ -92,10 +92,10 @@ int main()
 	// ------------------------------------------------------------------
 	float pointVertices[] = 
 	{
-		-0.5f,  0.5f,
-		-0.5f, -0.5f,
-		 0.5f,  0.5f,
-		 0.5f, -0.5f
+		-0.5f,  0.5f, 1.0f, 0.0f, 0.0f,
+		-0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f, 1.0f, 1.0f, 0.0f
 	};
 
 	unsigned int pointVBO, pointVAO;
@@ -103,10 +103,12 @@ int main()
 	glGenVertexArrays(1, &pointVAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, pointVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(pointVertices), pointVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(pointVertices), &pointVertices, GL_STATIC_DRAW);
 	glBindVertexArray(pointVAO);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2*sizeof(float)));
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
