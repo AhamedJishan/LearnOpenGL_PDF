@@ -57,15 +57,8 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\res\shaders\default.vert" />
-    <None Include="src\res\shaders\default.frag" />
-    <None Include="src\res\shaders\skyboxShader.vert" />
-    <None Include="src\res\shaders\reflection.frag" />
-    <None Include="src\res\shaders\reflection.vert" />
-    <None Include="src\res\shaders\refraction.frag" />
-    <None Include="src\res\shaders\refraction.vert" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="src\res\shaders\skyboxShader.frag" />
+    <None Include="src\res\shaders\basic.geom" />
+    <None Include="src\res\shaders\basic.frag" />
+    <None Include="src\res\shaders\basic.vert" />
   </ItemGroup>
 </Project>
