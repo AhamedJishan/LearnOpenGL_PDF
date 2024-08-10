@@ -83,7 +83,8 @@ int main()
 
 	// build and compile shaders
 	// -------------------------
-	Shader shader("src/res/shaders/basic.vert", "src/res/shaders/basic.frag", "src/res/shaders/basic.geom");
+	Shader basicShader("src/res/shaders/basic.vert", "src/res/shaders/basic.frag");
+	Shader normalsShader("src/res/shaders/normal.vert", "src/res/shaders/normal.frag", "src/res/shaders/normal.geom");
 
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
@@ -145,12 +146,19 @@ int main()
 		glClearColor(0.2f, 0.2f, 0.2f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		shader.Use();
-		shader.SetFloat("time", glfwGetTime());
-		shader.SetMat4("projection", projection);
-		shader.SetMat4("view", view);
-		shader.SetMat4("model", model);
-		nanosuit.Draw(shader);
+		// Render Base Model
+		basicShader.Use();
+		basicShader.SetFloat("time", glfwGetTime());
+		basicShader.SetMat4("projection", projection);
+		basicShader.SetMat4("view", view);
+		basicShader.SetMat4("model", model);
+		nanosuit.Draw(basicShader);
+
+		normalsShader.Use();
+		normalsShader.SetMat4("projection", projection);
+		normalsShader.SetMat4("view", view);
+		normalsShader.SetMat4("model", model);
+		nanosuit.Draw(normalsShader);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
@@ -178,6 +186,8 @@ void ProcessInputs(GLFWwindow* window)
 		camera.ProcessMovement(UP, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
 		camera.ProcessMovement(DOWN, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+		camera.ProcessMovement(SHIFT, deltaTime);
 
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);

@@ -173,9 +173,11 @@
     <Image Include="src\res\textures\container2_specular.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\res\shaders\basic.geom" />
     <None Include="src\res\shaders\basic.frag" />
     <None Include="src\res\shaders\basic.vert" />
+    <None Include="src\res\shaders\normal.frag" />
+    <None Include="src\res\shaders\normal.geom" />
+    <None Include="src\res\shaders\normal.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

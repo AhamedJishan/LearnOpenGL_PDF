@@ -14,7 +14,8 @@ enum Camera_Movement
 	LEFT,
 	RIGHT,
 	UP,
-	DOWN
+	DOWN,
+	SHIFT
 };
 
 //Default camera values
@@ -97,6 +98,11 @@ public:
 		{
 			Position -= WorldUp * velocity;
 		}
+		if (input == SHIFT)
+		{
+			MovementSpeed = SPEED/10.0f;
+		}
+		else MovementSpeed = SPEED;
 	}
 
 	// Process inputs recieved from mouse input system.
