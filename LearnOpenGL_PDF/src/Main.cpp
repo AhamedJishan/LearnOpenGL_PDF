@@ -35,9 +35,6 @@ float lastX = SCR_WIDTH / 2;
 float lastY = SCR_HEIGHT / 2;
 bool firstMouse = true;
 
-
-
-
 int main()
 {
 	// glfw: initialize and configure
@@ -90,29 +87,11 @@ int main()
 
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
-	float pointVertices[] = 
-	{
-		-0.5f,  0.5f,
-		-0.5f, -0.5f,
-		 0.5f,  0.5f,
-		 0.5f, -0.5f
-	};
-
-	unsigned int pointVBO, pointVAO;
-	glGenBuffers(1, &pointVBO);
-	glGenVertexArrays(1, &pointVAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, pointVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(pointVertices), pointVertices, GL_STATIC_DRAW);
-	glBindVertexArray(pointVAO);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
 
 
-	// Load Textures
-	// -------------
+	// Load Models/Textures
+	// --------------------
+	Model nanosuit("src/res/models/nanosuit/nanosuit.obj");
 
 
 	// Shader Configurations
@@ -154,7 +133,11 @@ int main()
 
 		// Initialising matrices
 		// ---------------------
+		glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 100.0f);
+		glm::mat4 view = camera.GetViewMatrix();
+		glm::mat4 model = glm::mat4(1.0f);
 
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
 
 		// Render
 		// ------
@@ -163,8 +146,11 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shader.Use();
-		glBindVertexArray(pointVAO);
-		glDrawArrays(GL_POINTS, 0, 4);
+		shader.SetFloat("time", glfwGetTime());
+		shader.SetMat4("projection", projection);
+		shader.SetMat4("view", view);
+		shader.SetMat4("model", model);
+		nanosuit.Draw(shader);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
