@@ -123,6 +123,15 @@ int main()
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2*sizeof(float)));
+
+	unsigned int instancedVBO;
+	glGenBuffers(1, &instancedVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, instancedVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 100, &translations[0], GL_STATIC_DRAW);
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)(0));
+	glVertexAttribDivisor(2, 1);
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
@@ -177,10 +186,6 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shader.Use();
-		for (unsigned int i = 0; i < 100; i++)
-		{
-			shader.SetVec2(("offsets[" + std::to_string(i) + "]"), translations[i]);
-		}
 		glBindVertexArray(VAO);
 		glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 100);
 		
