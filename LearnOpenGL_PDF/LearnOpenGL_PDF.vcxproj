@@ -173,6 +173,8 @@
     <Image Include="src\res\textures\container2_specular.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\res\shaders\basic.frag" />
+    <None Include="src\res\shaders\basic.vert" />
     <None Include="src\res\shaders\instanced.frag" />
     <None Include="src\res\shaders\instanced.vert" />
   </ItemGroup>
