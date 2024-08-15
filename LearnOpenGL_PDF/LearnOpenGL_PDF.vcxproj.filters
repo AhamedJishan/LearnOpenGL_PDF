@@ -59,7 +59,5 @@
   <ItemGroup>
     <None Include="src\res\shaders\basic.vert" />
     <None Include="src\res\shaders\basic.frag" />
-    <None Include="src\res\shaders\instanced.vert" />
-    <None Include="src\res\shaders\instanced.frag" />
   </ItemGroup>
 </Project>
