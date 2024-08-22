@@ -83,16 +83,49 @@ int main()
 
 	// build and compile shaders
 	// -------------------------
-	Shader shader("src/res/shaders/basic.vert", "src/res/shaders/basic.frag");
+	Shader shader("src/res/shaders/BlinnPhong.vert", "src/res/shaders/BlinnPhong.frag");
 
 
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
+	float planeVertices[] = {
+		// positions            // normals         // texcoords
+		 10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+		-10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
+		-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
+
+		 10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+		-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
+		 10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,  10.0f, 10.0f
+	};
+
+	unsigned int VBO, VAO;
+	glGenBuffers(1, &VBO);
+	glGenVertexArrays(1, &VAO);
+
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) 0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) (3 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) (6 * sizeof(float)));
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
 	// Load Models/Textures
 	// --------------------
-	Model planet("src/res/models/planet/planet.obj");
+	unsigned int floortexture = LoadTexture("src/res/textures/wood.png");
+	shader.Use();
+	shader.SetInt("texture1", 0);
+
+	// Lighting info
+	// -------------
+	glm::vec3 lightPos(0.0f);
+
 
 	// FPS Counter
 	// -----------
@@ -135,19 +168,19 @@ int main()
 
 		// Render
 		// ------
-		glEnable(GL_DEPTH_TEST);
-		glClearColor(0.2f, 0.2f, 0.2f, 1.f);
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		// Draw Objects
 		shader.Use();
 		shader.SetMat4("projection", projection);
 		shader.SetMat4("view", view);
-
-		// Drawing the planet
-		model = glm::translate(model, glm::vec3(0.0f, -3.0f, -50.0f));
-		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		shader.SetMat4("model", model);
-		planet.Draw(shader);
+		// Set Lighting uniforms
+		shader.SetVec3("viewPos", camera.Position);
+		shader.SetVec3("lightPos", lightPos);
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
