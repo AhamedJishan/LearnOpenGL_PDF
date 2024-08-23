@@ -124,7 +124,12 @@ int main()
 
 	// Lighting info
 	// -------------
-	glm::vec3 lightPos(0.0f);
+	glm::vec3 lightPos[] = {
+		glm::vec3(-7.5, 0.0, 0.0),
+		glm::vec3(-2.5, 0.0, 0.0),
+		glm::vec3( 2.5, 0.0, 0.0),
+		glm::vec3( 7.5, 0.0, 0.0)
+	};
 
 
 	// FPS Counter
@@ -171,6 +176,9 @@ int main()
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		if (glfwGetKey(window, GLFW_KEY_G)) glEnable(GL_FRAMEBUFFER_SRGB);
+		if (glfwGetKey(window, GLFW_KEY_L)) glDisable(GL_FRAMEBUFFER_SRGB);
+
 		// Draw Objects
 		shader.Use();
 		shader.SetMat4("projection", projection);
@@ -178,7 +186,10 @@ int main()
 		shader.SetMat4("model", model);
 		// Set Lighting uniforms
 		shader.SetVec3("viewPos", camera.Position);
-		shader.SetVec3("lightPos", lightPos);
+
+		int numOfLights = 4;
+		glUniform3fv(glGetUniformLocation(shader.ID, "lightPos"), numOfLights, &lightPos[0][0]);
+
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
