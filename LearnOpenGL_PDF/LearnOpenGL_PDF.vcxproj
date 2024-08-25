@@ -177,6 +177,8 @@
     <None Include="src\res\shaders\debugDepthQuad.vert" />
     <None Include="src\res\shaders\depthShader.frag" />
     <None Include="src\res\shaders\depthShader.vert" />
+    <None Include="src\res\shaders\shader.frag" />
+    <None Include="src\res\shaders\shader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

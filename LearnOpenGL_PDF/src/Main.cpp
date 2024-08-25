@@ -88,6 +88,7 @@ int main()
 
 	// build and compile shaders
 	// -------------------------
+	Shader shader("src/res/shaders/shader.vert", "src/res/shaders/shader.frag");
 	Shader depthShader("src/res/shaders/depthShader.vert", "src/res/shaders/depthShader.frag");
 	Shader debugDepthQuadShader("src/res/shaders/debugDepthQuad.vert", "src/res/shaders/debugDepthQuad.frag");
 
@@ -108,19 +109,32 @@ int main()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "Framebuffer is not complete!" << std::endl;
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
 	// Load Models/Textures
 	// --------------------
 	unsigned int floortexture = LoadTexture("src/res/textures/wood.png");
+
+	// Shader Configurations
+	// ---------------------
+	shader.Use();
+	shader.SetInt("diffuseTexture", 0);
+	shader.SetInt("depthMap", 1);
+	debugDepthQuadShader.Use();
+	debugDepthQuadShader.SetInt("depthMap", 0);
+
 
 	// lighting info
 	// -------------
@@ -150,7 +164,7 @@ int main()
 		if (timeSinceFPS>=1.f)
 		{
 			fps = std::to_string((int)(fpsCounter / timeSinceFPS));
-			newTitle = "LearnOpneGL		FPS: " + fps;
+			newTitle = "LearnOpenGL		FPS: " + fps;
 			glfwSetWindowTitle(window, newTitle.c_str());
 			fpsCounter = 0;
 			timeSinceFPS = 0.f;
@@ -162,7 +176,7 @@ int main()
 
 		// Render
 		// ------
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Render to DepthBuffer		
@@ -188,11 +202,29 @@ int main()
 		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		// Render scene with shadows
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		glm::mat4 view = camera.GetViewMatrix();
+
+		shader.Use();
+		shader.SetMat4("projection", projection);
+		shader.SetMat4("view", view);
+		shader.SetMat4("lightSpaceMatrix", lightSpaceMatrix);
+		shader.SetVec3("lightPos", lightPos);
+		shader.SetVec3("viewPos", camera.Position);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, floortexture);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, depthMap);
+		renderScene(shader);
+
 		// Render depthmap to quad for visual debugging
 		debugDepthQuadShader.Use();
+		debugDepthQuadShader.SetFloat("near_plane", near_plane);
+		debugDepthQuadShader.SetFloat("far_plane", far_plane);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
-		renderQuad(debugDepthQuadShader);
+		//renderQuad(debugDepthQuadShader);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
@@ -252,12 +284,11 @@ void renderPlane()
 			 25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,  25.0f, 25.0f
 		};
 
-		unsigned int VBO, VAO;
-		glGenBuffers(1, &VBO);
-		glGenVertexArrays(1, &VAO);
+		glGenBuffers(1, &planeVBO);
+		glGenVertexArrays(1, &planeVAO);
 
-		glBindVertexArray(VAO);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBindVertexArray(planeVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);

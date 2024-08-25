@@ -61,5 +61,7 @@
     <None Include="src\res\shaders\depthShader.vert" />
     <None Include="src\res\shaders\debugDepthQuad.vert" />
     <None Include="src\res\shaders\debugDepthQuad.frag" />
+    <None Include="src\res\shaders\shader.vert" />
+    <None Include="src\res\shaders\shader.frag" />
   </ItemGroup>
 </Project>
