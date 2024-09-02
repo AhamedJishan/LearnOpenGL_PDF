@@ -16,14 +16,15 @@ uniform sampler2D depthMap;
 uniform vec3 lightPos;
 uniform vec3 viewPos;
 
-float CalculateShadow(vec4 fragPosLightSpace)
+float CalculateShadow(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
 {
 	vec3 ProjCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
 	ProjCoords = ProjCoords * 0.5 + 0.5;
 
 	float currentDepthFromLight = ProjCoords.z;
 	float closestDepthFromLight = texture(depthMap, ProjCoords.xy).r;
-	float shadow = (currentDepthFromLight > closestDepthFromLight) ? 1.0 : 0.0;
+	float bias = max(0.05 *(1 - (dot(normal, lightDir))), 0.005);
+	float shadow = (currentDepthFromLight - bias > closestDepthFromLight) ? 1.0 : 0.0;
 	return shadow;
 }
 
@@ -48,7 +49,7 @@ void main()
 	vec3 specular = spec * lightColor;
 
 	// Calculate shadow
-	float shadow = CalculateShadow(fs_in.FragPosLightSpace);
+	float shadow = CalculateShadow(fs_in.FragPosLightSpace, normal, lightDir);
 	vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular) ) * color;
 
 	FragColor = vec4(lighting, 1.0);
