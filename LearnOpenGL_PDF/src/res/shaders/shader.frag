@@ -21,11 +21,18 @@ float CalculateShadow(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
 	vec3 ProjCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
 	ProjCoords = ProjCoords * 0.5 + 0.5;
 
-	float currentDepthFromLight = ProjCoords.z;
-	float closestDepthFromLight = texture(depthMap, ProjCoords.xy).r;
-	float bias = max(0.05 *(1 - (dot(normal, lightDir))), 0.005);
-	float shadow = (currentDepthFromLight - bias > closestDepthFromLight) ? 1.0 : 0.0;
-	return shadow;
+	if (ProjCoords.z > 1.0)
+	{
+		return 0.0;
+	}
+	else
+	{
+		float currentDepthFromLight = ProjCoords.z;
+		float closestDepthFromLight = texture(depthMap, ProjCoords.xy).r;
+		float bias = max(0.05 *(1 - (dot(normal, lightDir))), 0.005);
+		float shadow = (currentDepthFromLight - bias > closestDepthFromLight) ? 1.0 : 0.0;
+		return shadow;
+	}
 }
 
 void main()
