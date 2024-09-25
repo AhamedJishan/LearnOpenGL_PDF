@@ -17,33 +17,36 @@ uniform vec3 viewPos;
 
 uniform float farPlane;
 
+vec3 gridSamplingDisk[20] = vec3[]
+(
+   vec3(1, 1,  1), vec3( 1, -1,  1), vec3(-1, -1,  1), vec3(-1, 1,  1), 
+   vec3(1, 1, -1), vec3( 1, -1, -1), vec3(-1, -1, -1), vec3(-1, 1, -1),
+   vec3(1, 1,  0), vec3( 1, -1,  0), vec3(-1, -1,  0), vec3(-1, 1,  0),
+   vec3(1, 0,  1), vec3(-1,  0,  1), vec3( 1,  0, -1), vec3(-1, 0, -1),
+   vec3(0, 1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0, 1, -1)
+);
+
 float CalculateShadow(vec3 fragPos)
 {
 	vec3 lightToFrag = fragPos - lightPos;
 	float currentDepth = length(lightToFrag);
 
 	float shadow = 0.0;
-	float bias = 0.05;
-	float samples = 4.0;
-	float offset = 0.1;
+	float bias = 0.15;
+	int samples = 20;
+	float viewDistance = length(fragPos - viewPos);
+	float diskRadius = ( 1 + (viewDistance/farPlane) )/25.0;
 
-	for(float x = -offset; x < offset; x += offset/(samples * 0.5))
+	for (int i = 0; i < samples; i++)
 	{
-		for(float y = -offset; y < offset; y += offset/(samples * 0.5))
+		float closestDepth = texture(depthMap, lightToFrag + gridSamplingDisk[i] * diskRadius).r;
+		closestDepth *= farPlane;
+		if (currentDepth - bias > closestDepth)
 		{
-			for(float z = -offset; z < offset; z += offset/(samples * 0.5))
-			{
-				float closestDepth = texture(depthMap, lightToFrag + vec3(x, y, z)).r;
-				closestDepth *= farPlane;
-				if (currentDepth - bias > closestDepth)
-				{
-					shadow += 1.0;
-				}
-			}
+			shadow += 1.0;
 		}
 	}
-	shadow /= (samples * samples * samples);
-
+	shadow /= float(samples);
 	return shadow;
 }
 
