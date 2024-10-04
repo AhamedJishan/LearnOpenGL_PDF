@@ -173,10 +173,8 @@
     <Image Include="src\res\textures\container2_specular.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\res\shaders\debugDepthQuad.frag" />
-    <None Include="src\res\shaders\debugDepthQuad.vert" />
-    <None Include="src\res\shaders\depthShader.frag" />
-    <None Include="src\res\shaders\depthShader.vert" />
+    <None Include="src\res\shaders\normalShader.frag" />
+    <None Include="src\res\shaders\normalShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
