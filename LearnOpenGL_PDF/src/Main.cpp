@@ -91,7 +91,7 @@ int main()
 
 	// Load Models/Textures
 	// --------------------
-	Model plane("src/res/models/Primitives/Plane.obj");
+	Model loadedModel("src/res/models/cyborg/cyborg.obj");
 	unsigned int brickwallDiffuse = LoadTexture("src/res/textures/brickwall.jpg");
 	unsigned int brickwallNormal = LoadTexture("src/res/textures/brickwall_normal.jpg");
 
@@ -107,7 +107,7 @@ int main()
 
 	// lighting info
 	// -------------
-	glm::vec3 lightPos(1.0f, 4.0f, -4.0f);
+	glm::vec3 lightPos(1.0f, 4.0f, 4.0f);
 
 
 	// FPS Counter
@@ -151,7 +151,7 @@ int main()
 		glm::mat4 projection = glm::perspective(camera.Zoom, (SCR_WIDTH / (float)SCR_HEIGHT), 0.1f, 100.0f);
 		glm::mat4 view = camera.GetViewMatrix();
 		glm::mat4 model = glm::mat4(1.0);
-		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
 		normalShader.Use();
 		normalShader.SetMat4("projection", projection);
@@ -160,8 +160,8 @@ int main()
 		normalShader.SetVec3("lightPos", lightPos);
 		normalShader.SetVec3("viewPos", camera.Position);
 
-		RenderQuad();
-		//plane.Draw(normalShader);
+		//RenderQuad();
+		loadedModel.Draw(normalShader);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------

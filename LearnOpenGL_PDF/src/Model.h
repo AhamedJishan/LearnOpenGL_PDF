@@ -38,7 +38,7 @@ private:
 	void LoadModel(std::string path)
 	{
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(path, aiProcess_FlipUVs | aiProcess_Triangulate);
+		const aiScene* scene = importer.ReadFile(path, aiProcess_FlipUVs | aiProcess_Triangulate | aiProcess_CalcTangentSpace);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
@@ -86,6 +86,11 @@ private:
 			vector.z = mesh->mNormals[i].z;
 			vertex.Normal = vector;
 
+			vector.x = mesh->mTangents[i].x;
+			vector.y = mesh->mTangents[i].y;
+			vector.z = mesh->mTangents[i].z;
+			vertex.Tangent = vector;
+
 			if (mesh->mTextureCoords[0])
 			{
 				glm::vec2 vec;
@@ -112,6 +117,9 @@ private:
 
 			std::vector<Texture> specularMaps = LoadMaterialTextures(mat, aiTextureType_SPECULAR, "texture_specular");
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+
+			std::vector<Texture> normalMaps = LoadMaterialTextures(mat, aiTextureType_HEIGHT, "texture_normal");
+			textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 		}
 
 		return Mesh(vertices, indices, textures);
