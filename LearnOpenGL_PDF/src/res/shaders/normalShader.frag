@@ -2,8 +2,6 @@
 
 out vec4 FragColor;
 
-uniform vec3 lightPos;
-uniform vec3 viewPos;
 uniform sampler2D texture_diffuse;
 uniform sampler2D texture_normal;
 
@@ -11,7 +9,9 @@ in VS_OUT
 {
 	vec3 fragPos;
 	vec2 texCoords;
-	mat3 TBN;
+	vec3 TangentLightPos;
+    vec3 TangentViewPos;
+    vec3 TangentFragPos;
 }
 fs_in;
 
@@ -22,18 +22,17 @@ void main()
 	// Normal Calculations------------------------------------
 	vec3 normal = texture(texture_normal, fs_in.texCoords).rgb;
 	normal = normalize(normal * 2.0 - 1.0);
-	normal = normalize(fs_in.TBN * normal);
 
 	// Ambient lighting
 	vec3 ambientColor = 0.2 * baseColor;
 
 	// Diffuse lighting
-	vec3 lightDir = normalize(lightPos - fs_in.fragPos);
+	vec3 lightDir = normalize(fs_in.TangentLightPos - fs_in.TangentFragPos);
 	float diffuseFactor = max(dot(normal, lightDir), 0.0);
 	vec3 diffuseColor = diffuseFactor * baseColor;
 
 	// Specular Lighting
-	vec3 viewDir = normalize(viewPos - fs_in.fragPos);
+	vec3 viewDir = normalize(fs_in.TangentViewPos - fs_in.TangentFragPos);
 	vec3 halfwayDir = normalize(viewDir + lightDir);
 	float specularFactor = pow(max(dot(normal, halfwayDir), 0.0), 64);
 	vec3 specularColor = specularFactor * baseColor;

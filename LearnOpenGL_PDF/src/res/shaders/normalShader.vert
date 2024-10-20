@@ -14,9 +14,14 @@ out VS_OUT
 {
 	vec3 fragPos;
 	vec2 texCoords;
-	mat3 TBN;
+    vec3 TangentLightPos;
+    vec3 TangentViewPos;
+    vec3 TangentFragPos;
 }
 vs_out;
+
+uniform vec3 lightPos;
+uniform vec3 viewPos;
 
 void main()
 {
@@ -29,5 +34,9 @@ void main()
 	vec3 T = normalize(normalMat * aTangent);
 	vec3 B = normalize(normalMat * aBitangent);
 	vec3 N = normalize(normalMat * aNormal);
-	vs_out.TBN = mat3(T, B, N);
+	// for orthogonal matrices transpose is the same is inverse
+	mat3 TBN = transpose(mat3(T, B, N));
+    vs_out.TangentLightPos = TBN * lightPos;
+    vs_out.TangentViewPos  = TBN * viewPos;
+    vs_out.TangentFragPos  = TBN * vec3(model * vec4(aPos, 1.0));
 }
