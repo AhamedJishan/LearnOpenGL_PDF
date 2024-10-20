@@ -11,6 +11,7 @@ in VS_OUT
 {
 	vec3 fragPos;
 	vec2 texCoords;
+	mat3 TBN;
 }
 fs_in;
 
@@ -21,9 +22,10 @@ void main()
 	// Normal Calculations------------------------------------
 	vec3 normal = texture(texture_normal, fs_in.texCoords).rgb;
 	normal = normalize(normal * 2.0 - 1.0);
+	normal = normalize(fs_in.TBN * normal);
 
 	// Ambient lighting
-	vec3 ambientColor = vec3(0.2);
+	vec3 ambientColor = 0.2 * baseColor;
 
 	// Diffuse lighting
 	vec3 lightDir = normalize(lightPos - fs_in.fragPos);
