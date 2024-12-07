@@ -31,7 +31,9 @@ void main()
 	mat3 normalMat = transpose(inverse(mat3(model)));
 	vec3 T = normalize(normalMat * aTangent);
 	vec3 N = normalize(normalMat * aNormal);
+	// re-orthogonalize T with respect to N
 	T = normalize(T - dot(T, N) * N);
+	// then retrieve perpendicular vector B with the cross product of T and N
     vec3 B = cross(N, T);
 	// for orthogonal matrices transpose is the same is inverse
 	mat3 TBN = transpose(mat3(T, B, N));    
