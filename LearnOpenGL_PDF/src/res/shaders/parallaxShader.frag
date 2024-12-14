@@ -38,16 +38,20 @@ vec2 ParallaxMapping (vec2 texCoords, vec3 tangentViewDir)
 		currentDepthMapValue = texture(texture_displacement, currentTexCoords).r;
 		currentLayerDepth += layerDepth;
 	}
+	
+	vec2 previousTexCoords = currentTexCoords + deltaTexCoords;
+	float previousDepthMapValue = texture(texture_displacement, previousTexCoords).r;
+	float previousLayerDepth = currentLayerDepth - layerDepth;
 
-	return currentTexCoords;
+	// Get depth difference before and after collision
+	float after = currentDepthMapValue - currentLayerDepth;
+	float before = previousDepthMapValue - previousLayerDepth;
 
-	/* 
-	=============================== OLD WAY ==============================
-	float height = texture(texture_displacement, texCoords).r;
-	vec2 p = tangentViewDir.xy / tangentViewDir.z * (height * height_scale);
-	return texCoords - p;
-	========================================================================
-	*/
+	// Interpolate texture coords
+	float weight = after / (after - before);
+	vec2 finalTexCoords = previousTexCoords * weight + currentTexCoords * (1 - weight);
+
+	return finalTexCoords;
 }
 
 void main()
