@@ -30,6 +30,8 @@ void main()
 	// Offset texture coordinates with ParallaxMapping
 	vec3 viewDir = normalize(fs_in.TangentViewPos - fs_in.TangentFragPos);
 	vec2 texCoords = ParallaxMapping(fs_in.texCoords, viewDir);
+	if(texCoords.x > 1.0 || texCoords.y > 1.0 || texCoords.x < 0.0 || texCoords.y < 0.0)
+		discard;
 
 	// Obtain normal from normal map
 	vec3 normal = texture(texture_normal, texCoords).rgb;
