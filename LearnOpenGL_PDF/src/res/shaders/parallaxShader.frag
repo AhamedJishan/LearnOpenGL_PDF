@@ -20,9 +20,34 @@ fs_in;
 
 vec2 ParallaxMapping (vec2 texCoords, vec3 tangentViewDir)
 {
+	const float minLayers = 8;
+	const float maxLayers = 32;
+	float numLayers = mix(maxLayers, minLayers, max(dot(vec3(0, 0, 1), tangentViewDir), 0));
+	float layerDepth = 1/numLayers;
+
+	vec2 p = tangentViewDir.xy * height_scale;
+	vec2 deltaTexCoords = p / numLayers;
+
+	float currentLayerDepth = 0.0f;
+	vec2 currentTexCoords = texCoords;
+	float currentDepthMapValue = texture(texture_displacement, currentTexCoords).r;
+
+	while (currentLayerDepth < currentDepthMapValue)
+	{
+		currentTexCoords -= deltaTexCoords;
+		currentDepthMapValue = texture(texture_displacement, currentTexCoords).r;
+		currentLayerDepth += layerDepth;
+	}
+
+	return currentTexCoords;
+
+	/* 
+	=============================== OLD WAY ==============================
 	float height = texture(texture_displacement, texCoords).r;
 	vec2 p = tangentViewDir.xy / tangentViewDir.z * (height * height_scale);
 	return texCoords - p;
+	========================================================================
+	*/
 }
 
 void main()
