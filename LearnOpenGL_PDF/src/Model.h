@@ -1,5 +1,13 @@
 #pragma once
 
+/* -------MODEL VBO structure----------
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec3 aNormal;
+layout (location = 2) in vec2 aTexCoords;
+layout (location = 3) in vec3 aTangent;
+---------------------------------------
+*/
+
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <assimp/Importer.hpp>
@@ -38,7 +46,7 @@ private:
 	void LoadModel(std::string path)
 	{
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(path, aiProcess_FlipUVs | aiProcess_Triangulate);
+		const aiScene* scene = importer.ReadFile(path, aiProcess_FlipUVs | aiProcess_Triangulate | aiProcess_CalcTangentSpace);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
@@ -86,6 +94,11 @@ private:
 			vector.z = mesh->mNormals[i].z;
 			vertex.Normal = vector;
 
+			vector.x = mesh->mTangents[i].x;
+			vector.y = mesh->mTangents[i].y;
+			vector.z = mesh->mTangents[i].z;
+			vertex.Tangent = vector;
+
 			if (mesh->mTextureCoords[0])
 			{
 				glm::vec2 vec;
@@ -112,6 +125,9 @@ private:
 
 			std::vector<Texture> specularMaps = LoadMaterialTextures(mat, aiTextureType_SPECULAR, "texture_specular");
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+
+			std::vector<Texture> normalMaps = LoadMaterialTextures(mat, aiTextureType_HEIGHT, "texture_normal");
+			textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 		}
 
 		return Mesh(vertices, indices, textures);
@@ -166,7 +182,7 @@ unsigned int TextureFromFile(const char* path, std::string& directory)
 	if (data)
 	{
 		GLenum format;
-		if		(nrComponents == 1)
+		if (nrComponents == 1)
 			format = GL_RED;
 		else if (nrComponents == 3)
 			format = GL_RGB;
@@ -187,6 +203,6 @@ unsigned int TextureFromFile(const char* path, std::string& directory)
 		std::cout << "ERROR:: Texture failed to load at path: " << filename << std::endl;
 	}
 	stbi_image_free(data);
-	
+
 	return textureID;
 }
