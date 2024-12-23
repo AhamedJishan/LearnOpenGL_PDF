@@ -173,8 +173,10 @@
     <Image Include="src\res\textures\container2_specular.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\res\shaders\parallaxShader.frag" />
-    <None Include="src\res\shaders\parallaxShader.vert" />
+    <None Include="src\res\shaders\hdr.frag" />
+    <None Include="src\res\shaders\hdr.vert" />
+    <None Include="src\res\shaders\lighting.frag" />
+    <None Include="src\res\shaders\lighting.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
