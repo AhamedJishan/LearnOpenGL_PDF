@@ -24,8 +24,8 @@ void RenderQuad();
 void RenderCube();
 
 // Settings
-unsigned int SCR_WIDTH = 1920;
-unsigned int SCR_HEIGHT = 1080;
+unsigned int SCR_WIDTH = 1280;
+unsigned int SCR_HEIGHT = 720;
 float exposure = 1.0f;
 bool gammaCorrection = true;
 
@@ -212,6 +212,7 @@ int main()
 		// Render to the quad
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		hdrShader.Use();
+		hdrShader.SetFloat("exposure", exposure);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, colorBuffer);
 		RenderQuad();
